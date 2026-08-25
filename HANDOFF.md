@@ -9,10 +9,12 @@ Use this authority order:
 
 1. [GitHub issue #1](https://github.com/ray-manaloto/harness-evolution-ledger/issues/1) is the complete product specification and decision record.
 2. This document defines how the next thread resumes work.
-3. Live repository, compiler, dependency, provider-policy, and tool output override stale observations.
+3. [BOOTSTRAP.md](BOOTSTRAP.md) defines the phase-0 Codex project and repository setup contract.
+4. Live repository, compiler, dependency, provider-policy, and tool output override stale observations.
 
-Read issue #1 in full before planning or editing. Completion criterion: the working plan maps its
-steps to the specification's six delivery slices and names the first externally testable receipt.
+Read issue #1, this handoff, and `BOOTSTRAP.md` in full before planning or editing. Completion
+criterion: the working plan completes phase 0 before slice 1, maps later steps to the specification's
+six delivery slices, and names the first externally testable receipt.
 
 ## Current state
 
@@ -168,8 +170,8 @@ an earlier slice, and an earlier slice does not imply the later loop works.
 Bootstrap a trustworthy slice-1 foundation; do not attempt the entire issue in one change.
 
 1. Verify repository, issue #1, branch, HEAD, remotes, and clean worktree.
-2. Read issue #1 completely and compare this handoff with it. Treat the issue as authority if wording
-   differs.
+2. Read issue #1, this handoff, and `BOOTSTRAP.md` completely. Treat the issue as authority if wording
+   differs and complete the bootstrap document's phase-0 acceptance before product implementation.
 3. Create a working branch from current `origin/main`; preserve any unexpected worktree changes and
    stop to classify them before editing.
 4. Establish lightweight repository instructions for both Claude and Codex that point to issue #1 and
@@ -233,8 +235,9 @@ Then begin the first thread objective without another architecture interview.
 ## Suggested opening prompt
 
 > Work only in the `ray-manaloto/harness-evolution-ledger` repository. Read `HANDOFF.md` and GitHub
-> issue #1 completely, then produce the startup receipt they require. Treat issue #1 as the product
-> authority and begin the first thread objective: bootstrap the smallest truthful slice-1 vertical
-> tracer through the public `hel` CLI. Preserve unexpected worktree state, verify drift-prone facts from
-> primary sources, retain warnings and receipts, and publish completed work through a reviewed pull
-> request. Do not modify `knowledge-base` or `dotfiles` without explicit cross-repository authority.
+> issue #1 plus `BOOTSTRAP.md` completely, then produce the startup receipt they require. Treat issue
+> #1 as the product authority. Complete phase 0 and publish its verified repository setup before
+> beginning the smallest truthful slice-1 vertical tracer through the public `hel` CLI. Preserve
+> unexpected worktree state, verify drift-prone facts from primary sources, retain warnings and
+> receipts, and publish completed work through reviewed pull requests. Do not modify `knowledge-base`
+> or `dotfiles` without explicit cross-repository authority.
