@@ -19,7 +19,7 @@ The first SBOM run exited 0 but warned that no explicit source name/version was
 provided. The task now supplies `harness-evolution-ledger` and `git rev-parse HEAD`;
 the rerun exited 0 without that warning.
 
-`mise run tools:lock` resolved 111 exact platform entries and reported 22 skipped
+`mise run tools:lock` resolved 118 exact platform entries and reported 22 skipped
 tool/platform combinations. The versioned lockfile preserves the resolved entries;
 the skipped combinations are not claimed as tested. Exact host stdout, stderr,
 timestamps, and statuses for the seven final controls are retained in
@@ -38,6 +38,11 @@ fnox 1.34.0
 Doppler CLI 3.76.5
 codex-cli 0.149.1
 ```
+
+PR CI run `32918067811` failed at the shared gate because Ubuntu's ambient GCC
+13.3 did not know CMake feature `cxx_std_26`. That run is not counted as the
+deliberate failure control. The project now pins `conda:clangxx` 22.1.8 and the host
+preset selects `clang++`; the P2996 container still overrides the compiler path.
 
 `DOPPLER_TOKEN`, `ANTHROPIC_API_KEY`, and `OPENAI_API_KEY` were absent. The
 poisoned child-process control removed common Anthropic and OpenAI key variables.

@@ -19,6 +19,7 @@ hk = "1.56.1"
 "github:DopplerHQ/cli" = "3.76.5"
 "pipx:cmakelang" = { version = "0.6.13", depends = ["python"] }
 "conda:clang-tools" = "22.1.8"
+"conda:clangxx" = "22.1.8"
 ninja = "1.13.2"
 node = "26.7.0"
 "npm:@openai/codex" = "0.149.1"

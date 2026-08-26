@@ -93,7 +93,7 @@ Captured 2026-08-25 in America/Chicago before repository mutation.
 - Exa remained installed but not callable because OAuth was unavailable.
 - `DOPPLER_TOKEN` was absent from the task environment. No credential value was
   requested, printed, or persisted.
-- Mise resolved 111 exact lock entries and explicitly skipped 22 unsupported
+- Mise resolved 118 exact lock entries and explicitly skipped 22 unsupported
   tool/platform combinations. The skipped combinations remain typed lock gaps,
   not successful platform controls.
 - The immutable devcontainer index selected an arm64 image whose embedded OCI
@@ -107,3 +107,6 @@ Captured 2026-08-25 in America/Chicago before repository mutation.
 - The initial CMake smoke build exposed a missing versioned
   `clang-scan-deps-22` shim. Disabling module scanning for the non-module smoke
   target removed that hidden dependency and the opposing build rerun passed.
+- The first PR CI run selected Ubuntu's ambient GCC 13.3 and rejected CMake's
+  `cxx_std_26` feature before compilation. This exposed an unpinned host compiler;
+  the corrective candidate pins Clang++ 22.1.8 and selects it in the host preset.
