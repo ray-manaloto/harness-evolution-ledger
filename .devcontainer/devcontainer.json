@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "harness-evolution-ledger",
+  "image": "ghcr.io/ray-manaloto/dotfiles-devcontainer@sha256:d57c2b5dbddb8e08571dee86bbb9f239957691454de85a1401239da9396d0012",
+  "remoteUser": "ubuntu",
+  "updateRemoteUserUID": false,
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,consistency=cached",
+  "containerEnv": {
+    "DEVCONTAINER": "true"
+  }
+}
