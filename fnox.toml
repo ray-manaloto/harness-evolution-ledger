@@ -1,0 +1,12 @@
+# Provider identities are versioned; authentication and values remain machine-local.
+root = true
+
+[providers.doppler]
+type = "doppler"
+project = "harness-evolution-ledger"
+config = "dev"
+
+[secrets]
+# DOPPLER_TOKEN is intentionally not declared or stored here. The host obtains it
+# from macOS Keychain before fnox contacts Doppler.
+HEL_PROVIDER_CANARY = { provider = "doppler", value = "HEL_PROVIDER_CANARY", if_missing = "warn", description = "Non-secret provider-routing control" }

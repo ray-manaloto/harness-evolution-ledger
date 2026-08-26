@@ -1,0 +1,397 @@
+#!/usr/bin/env python3
+"""Dependency-free phase-0 task implementations.
+
+The script emits only tool identity and credential presence. It never prints a
+credential value and never imports sibling-repository code.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MACHINE_OWNED_CODEX_KEYS = {
+    "model",
+    "model_provider",
+    "notify",
+    "profile",
+    "web_search",
+}
+POISONED_PROVIDER_KEYS = {
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
+    "CLAUDE_CODE_OAUTH_TOKEN",
+    "CODEX_API_KEY",
+    "OPENAI_ADMIN_KEY",
+    "OPENAI_API_KEY",
+}
+ALLOWED_CHILD_KEYS = {
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "PATH",
+    "SHELL",
+    "SSH_AUTH_SOCK",
+    "TERM",
+    "TMPDIR",
+    "USER",
+}
+REQUIRED_PLUGINS = (
+    "codex-security@openai-curated",
+    "context7@context7-marketplace",
+    "exa@exa",
+    "firecrawl@claude-plugins-official",
+    "last30days@last30days-skill",
+    "mattpocock-skills@mattpocock",
+    "mise@brentmitchell25",
+    "openai-developers@openai-curated",
+)
+RECEIPT_KEYS = {"schema", "pr", "remote_sha", "review", "checks"}
+
+
+def run(argv: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    print("+", " ".join(argv), flush=True)
+    return subprocess.run(argv, cwd=ROOT, check=check, text=True)
+
+
+def capture(argv: list[str]) -> tuple[int, str]:
+    result = subprocess.run(
+        argv,
+        cwd=ROOT,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    return result.returncode, result.stdout.strip()
+
+
+def version(binary: str, *args: str) -> str:
+    path = shutil.which(binary)
+    if path is None:
+        return "unavailable"
+    rc, output = capture([binary, *args])
+    first = output.splitlines()[0] if output else "no version output"
+    return f"rc={rc} {first}"
+
+
+def plugin_inventory() -> None:
+    rc, output = capture(["codex", "plugin", "list", "--json"])
+    if rc != 0:
+        print(f"plugins=unavailable rc={rc}")
+        return
+    try:
+        document = json.loads(output)
+        installed = document.get("installed", [])
+        observed = {
+            item["pluginId"]: item
+            for item in installed
+            if isinstance(item, dict) and isinstance(item.get("pluginId"), str)
+        }
+    except (json.JSONDecodeError, AttributeError, KeyError, TypeError):
+        print("plugins=invalid-json")
+        return
+    for plugin_id in REQUIRED_PLUGINS:
+        item = observed.get(plugin_id)
+        if item is None:
+            print(f"plugin.{plugin_id}=missing")
+            continue
+        print(
+            f"plugin.{plugin_id}=version:{item.get('version', 'unknown')} "
+            f"enabled:{'yes' if item.get('enabled') else 'no'}"
+        )
+
+
+def cmake_preset() -> str:
+    return "container-debug" if os.environ.get("DEVCONTAINER") == "true" else "host-debug"
+
+
+def doctor() -> int:
+    print(f"repository={ROOT}")
+    print(f"platform={platform.platform()}")
+    rc, branch = capture(["git", "branch", "--show-current"])
+    print(f"git_branch={branch or 'detached'} rc={rc}")
+    rc, head = capture(["git", "rev-parse", "HEAD"])
+    print(f"git_head={head} rc={rc}")
+    for binary, args in (
+        ("mise", ("--version",)),
+        ("cmake", ("--version",)),
+        ("ninja", ("--version",)),
+        ("clang++", ("--version",)),
+        ("clang-tidy", ("--version",)),
+        ("hk", ("--version",)),
+        ("fnox", ("--version",)),
+        ("doppler", ("--version",)),
+        ("codex", ("--version",)),
+    ):
+        print(f"tool.{binary}={version(binary, *args)}")
+    for name in (
+        "DOPPLER_TOKEN",
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_AUTH_TOKEN",
+        "CODEX_API_KEY",
+        "OPENAI_API_KEY",
+    ):
+        print(f"credential.{name}.present={'yes' if os.environ.get(name) else 'no'}")
+    plugin_inventory()
+    print(f"codex_hooks={'present' if (ROOT / '.codex/hooks.json').is_file() else 'missing'}")
+    print(f"codex_rules={'present' if (ROOT / '.codex/rules/project.rules').is_file() else 'missing'}")
+    rc, _ = capture(["hk", "validate"])
+    print(f"hk_config={'valid' if rc == 0 else 'invalid'} rc={rc}")
+    print("compiler.gcc16.2=unavailable")
+    print("compiler.clang-p2996=devcontainer-only")
+    print(f"environment.devcontainer={'yes' if os.environ.get('DEVCONTAINER') else 'no'}")
+    return 0
+
+
+def tracked_files(suffixes: tuple[str, ...], names: tuple[str, ...] = ()) -> list[str]:
+    rc, output = capture(["git", "ls-files", "--cached", "--others", "--exclude-standard"])
+    if rc != 0:
+        raise RuntimeError("git ls-files failed")
+    return [
+        item
+        for item in output.splitlines()
+        if item.endswith(suffixes) or Path(item).name in names
+    ]
+
+
+def format_files(check_only: bool) -> int:
+    cpp = tracked_files((".cpp", ".hpp", ".cc", ".hh"))
+    cmake = tracked_files((".cmake",), ("CMakeLists.txt",))
+    shell = tracked_files((".sh",))
+    if cpp:
+        args = ["clang-format", "--dry-run", "--Werror"] if check_only else ["clang-format", "-i"]
+        run([*args, *cpp])
+    if cmake:
+        args = ["cmake-format", "--check"] if check_only else ["cmake-format", "-i"]
+        run([*args, *cmake])
+    if shell:
+        args = ["shfmt", "-d"] if check_only else ["shfmt", "-w"]
+        run([*args, *shell])
+    run(["rumdl", "fmt", "--check", "."] if check_only else ["rumdl", "fmt", "."])
+    if check_only:
+        run(["taplo", "format", "--check"])
+    else:
+        run(["taplo", "format"])
+    return 0
+
+
+def lint() -> int:
+    run(["rumdl", "check", "."])
+    run(["taplo", "check"])
+    run(["actionlint"])
+    shell = tracked_files((".sh",))
+    if shell:
+        run(["shellcheck", *shell])
+    py = tracked_files((".py",))
+    if py:
+        run([sys.executable, "-m", "py_compile", *py])
+    run(["cmake-lint", "CMakeLists.txt"])
+    run(["clang-tidy", "-p", f"build/{cmake_preset()}", "tests/phase0_smoke.cpp"])
+    return 0
+
+
+def config_policy(path: Path | None = None) -> int:
+    import tomllib
+
+    config_path = path or ROOT / ".codex/config.toml"
+    data = tomllib.loads(config_path.read_text(encoding="utf-8"))
+    rejected = sorted(MACHINE_OWNED_CODEX_KEYS.intersection(data))
+    if rejected:
+        print(f"rejected machine-owned project keys: {', '.join(rejected)}", file=sys.stderr)
+        return 2
+    permitted = {"features", "shell_environment_policy"}
+    unknown = sorted(set(data).difference(permitted))
+    if unknown:
+        print(f"rejected unreviewed project keys: {', '.join(unknown)}", file=sys.stderr)
+        return 2
+    print("project Codex config contains only reviewed project-owned keys")
+    return 0
+
+
+def secrets_control() -> int:
+    poisoned = dict(os.environ)
+    for name in POISONED_PROVIDER_KEYS:
+        poisoned[name] = f"poison-{name.lower()}"
+    child = {key: value for key, value in poisoned.items() if key in ALLOWED_CHILD_KEYS}
+    visible = sorted(POISONED_PROVIDER_KEYS.intersection(child))
+    if visible:
+        print(f"provider child inherited forbidden keys: {visible}", file=sys.stderr)
+        return 2
+    probe = subprocess.run(
+        [sys.executable, "-c", "import os; print(','.join(sorted(os.environ)))"],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        env=child,
+    )
+    observed = set(filter(None, probe.stdout.strip().split(",")))
+    leaked = sorted(POISONED_PROVIDER_KEYS.intersection(observed))
+    if leaked:
+        print(f"poisoned child leaked keys: {leaked}", file=sys.stderr)
+        return 2
+    print("poisoned API-key variables absent from scoped provider child")
+    print(f"doppler_token_present={'yes' if os.environ.get('DOPPLER_TOKEN') else 'no'}")
+    return 0
+
+
+def consistency() -> int:
+    if os.environ.get("HEL_PHASE0_FORCE_FAIL") == "1":
+        print("forced negative control reached repository consistency gate", file=sys.stderr)
+        return 86
+    run(["git", "diff", "--check"])
+    for required in (
+        "AGENTS.md",
+        "BOOTSTRAP.md",
+        "HANDOFF.md",
+        "mise.lock",
+        ".codex/hooks.json",
+        ".codex/rules/project.rules",
+    ):
+        if not (ROOT / required).exists():
+            print(f"missing required phase-0 file: {required}", file=sys.stderr)
+            return 2
+    if (ROOT / "AGENTS.md").stat().st_size >= 12_000:
+        print("AGENTS.md exceeds 12,000-byte contract", file=sys.stderr)
+        return 2
+    return 0
+
+
+def changed() -> int:
+    run(["git", "diff", "--check"])
+    run(["rumdl", "check", "AGENTS.md", "BOOTSTRAP.md", "HANDOFF.md", "README.md"])
+    return 0
+
+
+def delivery_gate(operation: str) -> int:
+    marker = ROOT / "docs/receipts/phase-0/merged.json"
+    if not marker.is_file():
+        print(f"{operation} blocked: phase-0 merged receipt is absent", file=sys.stderr)
+        return 2
+    data = json.loads(marker.read_text(encoding="utf-8"))
+    if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
+        print(f"{operation} blocked: merged receipt schema is invalid", file=sys.stderr)
+        return 2
+    pr = data.get("pr")
+    remote_sha = data.get("remote_sha")
+    review = data.get("review")
+    checks = data.get("checks")
+    if (
+        not isinstance(pr, int)
+        or not isinstance(remote_sha, str)
+        or len(remote_sha) != 40
+        or not all(character in "0123456789abcdef" for character in remote_sha)
+        or not isinstance(review, dict)
+        or review.get("decision") != "APPROVED"
+        or not isinstance(review.get("reviewer"), str)
+        or not review["reviewer"]
+        or not isinstance(checks, dict)
+        or not checks
+        or any(value != "SUCCESS" for value in checks.values())
+    ):
+        print(f"{operation} blocked: merged receipt values are invalid", file=sys.stderr)
+        return 2
+    rc, local_head = capture(["git", "rev-parse", "HEAD"])
+    if rc or local_head != remote_sha:
+        print(f"{operation} blocked: local HEAD does not equal receipt SHA", file=sys.stderr)
+        return 2
+    rc, remote_main = capture(["git", "rev-parse", "origin/main"])
+    if rc or remote_main != remote_sha:
+        print(f"{operation} blocked: origin/main does not equal receipt SHA", file=sys.stderr)
+        return 2
+    result = subprocess.run(
+        [
+            "gh", "pr", "view", str(pr), "--repo", "ray-manaloto/harness-evolution-ledger",
+            "--json", "state,mergeCommit,author,reviews,statusCheckRollup",
+        ],
+        cwd=ROOT,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if result.returncode:
+        print(f"{operation} blocked: live PR verification unavailable", file=sys.stderr)
+        return 2
+    live = json.loads(result.stdout)
+    author = live.get("author", {}).get("login")
+    reviewer = review["reviewer"]
+    approved = any(
+        item.get("state") == "APPROVED"
+        and item.get("author", {}).get("login") == reviewer
+        and reviewer != author
+        for item in live.get("reviews", [])
+    )
+    live_checks = live.get("statusCheckRollup", [])
+    successful_names = {
+        item.get("name") or item.get("context")
+        for item in live_checks
+        if item.get("conclusion") == "SUCCESS"
+    }
+    green = bool(live_checks) and all(
+        item.get("conclusion") == "SUCCESS" for item in live_checks
+    )
+    declared_checks_match = set(checks).issubset(successful_names)
+    merged_sha = (live.get("mergeCommit") or {}).get("oid")
+    if (
+        live.get("state") != "MERGED"
+        or merged_sha != remote_sha
+        or not approved
+        or not green
+        or not declared_checks_match
+    ):
+        print(f"{operation} blocked: live PR, review, SHA, or checks do not match", file=sys.stderr)
+        return 2
+    print(f"{operation} prerequisites verified live at {remote_sha}")
+    return 0
+
+
+def main() -> int:
+    if len(sys.argv) < 2:
+        print("usage: phase0.py COMMAND", file=sys.stderr)
+        return 2
+    command = sys.argv[1]
+    if command == "doctor":
+        return doctor()
+    if command == "configure":
+        run(["cmake", "--preset", cmake_preset()])
+        return 0
+    if command == "build":
+        run(["cmake", "--build", "--preset", cmake_preset()])
+        return 0
+    if command == "ctest":
+        run(["ctest", "--preset", cmake_preset()])
+        return 0
+    if command == "format":
+        return format_files(False)
+    if command == "format-check":
+        return format_files(True)
+    if command == "lint":
+        return lint()
+    if command == "config-policy":
+        path = Path(sys.argv[2]) if len(sys.argv) == 3 else None
+        return config_policy(path)
+    if command == "secrets-control":
+        return secrets_control()
+    if command == "consistency":
+        return consistency()
+    if command == "changed":
+        return changed()
+    if command == "deliberate-failure":
+        print("intentional phase-0 delivery failure control", file=sys.stderr)
+        return 42
+    if command == "delivery-gate" and len(sys.argv) == 3:
+        return delivery_gate(sys.argv[2])
+    print(f"unknown command: {command}", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

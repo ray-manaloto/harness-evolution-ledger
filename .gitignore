@@ -1,0 +1,12 @@
+/build/
+/.cache/
+/.tools/
+/.rumdl_cache/
+/compile_commands.json
+/fnox.local.toml
+/mise.local.toml
+/.codex/local/
+/.phase0-controls/
+*.log
+*.sarif
+**/.last30days-library.db

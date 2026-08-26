@@ -1,0 +1,162 @@
+min_version = "2026.8.5"
+
+[settings]
+github_attestations = true
+lockfile = true
+minimum_release_age = "7d"
+slsa = true
+task.output = "keep-order"
+task.timings = true
+
+[tools]
+actionlint = "1.7.12"
+cmake = "4.4.3"
+cosign = "3.1.3"
+devcontainer-cli = "0.88.0"
+fnox = "1.34.0"
+gitleaks = "8.30.1"
+hk = "1.56.1"
+"github:DopplerHQ/cli" = "3.76.5"
+"pipx:cmakelang" = { version = "0.6.13", depends = ["python"] }
+"conda:clang-tools" = "22.1.8"
+ninja = "1.13.2"
+node = "26.7.0"
+"npm:@openai/codex" = "0.149.1"
+python = "3.14.7"
+rumdl = "0.2.60"
+shellcheck = "0.11.0"
+shfmt = "3.13.1"
+syft = "1.51.0"
+taplo = "0.10.0"
+
+[env]
+PYTHONDONTWRITEBYTECODE = "1"
+
+[task_config]
+shell = "bash -c"
+
+[tasks.bootstrap]
+description = "Install exact project tools and verify the lockfile"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+mise install --locked
+mise lock --dry-run >/dev/null
+hk validate
+'''
+
+[tasks."tools:lock"]
+description = "Regenerate the exact cross-platform mise lockfile"
+run = "mise lock"
+
+[tasks.setup]
+description = "Bootstrap exact tools, install repository-local hooks, and report state"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+mise run bootstrap
+mise run hooks:install
+mise run doctor
+'''
+
+[tasks.doctor]
+description = "Report phase-0 tool, auth-presence, hook, rule, Git, and platform state"
+run = "python3 scripts/phase0.py doctor"
+
+[tasks.configure]
+description = "Configure the host C++26 smoke build"
+run = "python3 scripts/phase0.py configure"
+
+[tasks.build]
+description = "Build the configured host target"
+depends = ["configure"]
+run = "python3 scripts/phase0.py build"
+
+[tasks.test]
+description = "Run CTest and repository unit controls"
+depends = ["build"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+python3 scripts/phase0.py ctest
+python3 -m unittest discover -s tests -p 'test_*.py'
+'''
+
+[tasks.fmt]
+description = "Format C++, CMake, Markdown, shell, and TOML files"
+run = "python3 scripts/phase0.py format"
+
+[tasks."fmt:check"]
+description = "Check formatting without writing files"
+run = "python3 scripts/phase0.py format-check"
+
+[tasks.lint]
+description = "Lint Markdown, TOML, Actions, CMake, Python, shell, and C++"
+depends = ["configure"]
+run = "python3 scripts/phase0.py lint"
+
+[tasks.check]
+description = "Run the complete local phase-0 gate"
+depends = ["fmt:check", "lint", "test", "config:verify", "secrets:verify"]
+run = "python3 scripts/phase0.py consistency"
+
+[tasks."check:changed"]
+description = "Run bounded checks suitable for the Codex Stop hook"
+run = "python3 scripts/phase0.py changed"
+
+[tasks."hooks:install"]
+description = "Install repository-local hk Git hooks"
+run = "hk install --force-local"
+
+[tasks."hooks:verify"]
+description = "Exercise Codex and Git hooks with allow and deny controls"
+run = "python3 scripts/verify_hooks.py"
+
+[tasks."rules:verify"]
+description = "Exercise every command rule with matching and opposite controls"
+run = "python3 scripts/verify_rules.py"
+
+[tasks."plugins:inventory"]
+description = "Regenerate the sanitized account plugin and skill inventory"
+run = "python3 scripts/plugin_inventory.py"
+
+[tasks."receipts:local"]
+description = "Run and retain exact host phase-0 command receipts"
+run = "python3 scripts/capture_phase0_receipt.py"
+
+[tasks."config:verify"]
+description = "Reject machine-owned keys from project Codex configuration"
+run = "python3 scripts/phase0.py config-policy"
+
+[tasks."secrets:verify"]
+description = "Prove provider children receive an allowlisted, API-key-free environment"
+run = "python3 scripts/phase0.py secrets-control"
+
+[tasks.security]
+description = "Scan the working tree for committed or generated secrets"
+run = "gitleaks dir . --redact --no-banner"
+
+[tasks.sbom]
+description = "Create a repository SBOM without resolving credentials"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p build
+source_version="$(git rev-parse HEAD)"
+syft dir:. \
+  --source-name harness-evolution-ledger \
+  --source-version "${source_version}" \
+  -o spdx-json=build/phase0.spdx.json
+'''
+
+[tasks."control:fail"]
+description = "Deliberately fail so CI can prove the gate blocks delivery"
+run = "python3 scripts/phase0.py deliberate-failure"
+
+[tasks.ship]
+description = "Verify phase-0 shipment prerequisites (publication remains gated)"
+run = "python3 scripts/phase0.py delivery-gate ship"
+
+[tasks.land]
+description = "Verify phase-0 landing prerequisites (merge remains gated)"
+run = "python3 scripts/phase0.py delivery-gate land"
