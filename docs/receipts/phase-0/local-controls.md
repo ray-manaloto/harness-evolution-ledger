@@ -42,7 +42,17 @@ codex-cli 0.149.1
 PR CI run `32918067811` failed at the shared gate because Ubuntu's ambient GCC
 13.3 did not know CMake feature `cxx_std_26`. That run is not counted as the
 deliberate failure control. The project now pins `conda:clangxx` 22.1.8 and the host
-preset selects `clang++`; the P2996 container still overrides the compiler path.
+configure task selects its real binary; the P2996 container still overrides the
+compiler path.
+
+PR CI run `32918389481` then built successfully with that pin but failed clang-tidy:
+the analyzer's separate conda prefix interpreted mise's shell compiler shim as a
+driver (`unknown argument: '-f'`) and missed `stddef.h`. A Linux devcontainer
+reproduction proved that using the real locked compiler binary plus its exact
+`lib/clang/22` resource directory makes the separate locked analyzer pass.
+The first local switch from the previous cached compiler caused CMake to warn that
+the compiler variable required cache regeneration; CMake deleted and regenerated
+the host cache, and the opposing rerun passed without the warning.
 
 `DOPPLER_TOKEN`, `ANTHROPIC_API_KEY`, and `OPENAI_API_KEY` were absent. The
 poisoned child-process control removed common Anthropic and OpenAI key variables.
@@ -124,3 +134,7 @@ The container has an intentionally isolated Codex home. Its doctor reported the
 eight account plugins missing; account-plugin exercise belongs to the host, while
 the container proves repository tools, compilation, tests, hooks, rules, and secret
 environment separation.
+
+Firecrawl's bounded public JSON receipt is stored under
+`docs/receipts/phase-0/firecrawl/`. `/.firecrawl/` is ignored as machine runtime
+state; no file under that runtime directory remains in the candidate tree.

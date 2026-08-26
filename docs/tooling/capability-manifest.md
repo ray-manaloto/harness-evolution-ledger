@@ -12,7 +12,7 @@ tool calls are recorded separately. No credential values appear here.
 | Matt Pocock engineering | mattpocock `1.2.3`; skills | Repository read/review; no MCP | None | Loaded `code-review` instructions explicitly | Final PR review still pending |
 | Context7 | Context7 `1.0.1`; MCP and skill | Remote library lookup and docs read | Configuration reported `Not logged in` | Resolved CLI11 and retrieved official CMake target usage | Status label drifted from successful call |
 | Codex Security | OpenAI curated `2f1a8948`; skills | Repository security analysis when invoked | On-use Codex authorization | Fresh thread exposed `security-scan` without scanning sibling repositories | Cached but not installed at task start; installed before control |
-| Firecrawl | Anthropic marketplace `1.0.9`; skills, expected MCP/CLI | Public web search; network read | API auth for some paths | Bounded search returned three source URLs, retained in `.firecrawl/phase0-control.json` | Plugin shim unavailable; exact npx CLI used. Feedback prompt auth was ambiguous |
+| Firecrawl | Anthropic marketplace `1.0.9`; skills, expected MCP/CLI | Public web search; network read | API auth for some paths | Bounded search returned three source URLs, retained as a project receipt | Plugin shim unavailable; exact npx CLI used. Feedback prompt auth was ambiguous |
 | Exa | Exa `3.4.1`; MCP and skills | Independent network research | OAuth required | Installation and fresh-thread connection attempt positively exercised | **Blocked:** MCP returned `AuthRequired`; no generic-search substitution |
 | Last30Days | mvanhorn `3.21.1`; skill/engine | Recent-source retrieval; local receipt write and network read | Configured source credentials by presence only | Seven-day query ran and retained a dated raw receipt plus web supplements | **Failed positive control:** planner drift and TLS failures yielded zero engine evidence |
 
@@ -69,7 +69,7 @@ Firecrawl was exercised through its exact CLI; Exa was not substituted.
 
 ## Retained public-source controls
 
-- Firecrawl: `.firecrawl/phase0-control.json`.
+- Firecrawl: `docs/receipts/phase-0/firecrawl/phase0-control.json`.
 - Last30Days engine and dated supplements:
   `docs/receipts/phase-0/last30days/c-26-static-reflection-raw.md`.
 - Context7 result: CLI11's official docs specified `find_package(CLI11 CONFIG

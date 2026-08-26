@@ -113,6 +113,17 @@ def cmake_preset() -> str:
     return "container-debug" if os.environ.get("DEVCONTAINER") == "true" else "host-debug"
 
 
+def mise_prefix(tool: str, version_text: str) -> Path:
+    rc, output = capture(["mise", "where", f"{tool}@{version_text}"])
+    if rc or not output:
+        raise RuntimeError(f"locked mise prefix unavailable: {tool}@{version_text}")
+    return Path(output)
+
+
+def host_compiler() -> Path:
+    return mise_prefix("conda:clangxx", "22.1.8") / "bin/clang++"
+
+
 def doctor() -> int:
     print(f"repository={ROOT}")
     print(f"platform={platform.platform()}")
@@ -132,6 +143,8 @@ def doctor() -> int:
         ("codex", ("--version",)),
     ):
         print(f"tool.{binary}={version(binary, *args)}")
+    if os.environ.get("DEVCONTAINER") != "true":
+        print(f"compiler.host.selected={host_compiler()}")
     for name in (
         "DOPPLER_TOKEN",
         "ANTHROPIC_API_KEY",
@@ -194,7 +207,14 @@ def lint() -> int:
     if py:
         run([sys.executable, "-m", "py_compile", *py])
     run(["cmake-lint", "CMakeLists.txt"])
-    run(["clang-tidy", "-p", f"build/{cmake_preset()}", "tests/phase0_smoke.cpp"])
+    if os.environ.get("DEVCONTAINER") == "true":
+        tidy = Path("/usr/lib/llvm-22/bin/clang-tidy")
+        extra: list[str] = []
+    else:
+        compiler_prefix = mise_prefix("conda:clangxx", "22.1.8")
+        tidy = mise_prefix("conda:clang-tools", "22.1.8") / "bin/clang-tidy"
+        extra = [f"--extra-arg=-resource-dir={compiler_prefix / 'lib/clang/22'}"]
+    run([str(tidy), *extra, "-p", f"build/{cmake_preset()}", "tests/phase0_smoke.cpp"])
     return 0
 
 
@@ -361,7 +381,10 @@ def main() -> int:
     if command == "doctor":
         return doctor()
     if command == "configure":
-        run(["cmake", "--preset", cmake_preset()])
+        argv = ["cmake", "--preset", cmake_preset()]
+        if os.environ.get("DEVCONTAINER") != "true":
+            argv.append(f"-DCMAKE_CXX_COMPILER={host_compiler()}")
+        run(argv)
         return 0
     if command == "build":
         run(["cmake", "--build", "--preset", cmake_preset()])

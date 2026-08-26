@@ -109,4 +109,9 @@ Captured 2026-08-25 in America/Chicago before repository mutation.
   target removed that hidden dependency and the opposing build rerun passed.
 - The first PR CI run selected Ubuntu's ambient GCC 13.3 and rejected CMake's
   `cxx_std_26` feature before compilation. This exposed an unpinned host compiler;
-  the corrective candidate pins Clang++ 22.1.8 and selects it in the host preset.
+  the corrective candidate pins Clang++ 22.1.8 and selects its real binary through
+  the public configure task.
+- The second PR CI run configured and built with pinned Clang++ 22.1.8, then its
+  separate conda clang-tidy prefix misread mise's compiler wrapper and could not
+  find the compiler resource headers. The repository interface now passes CMake
+  the real locked compiler binary and clang-tidy the matching resource directory.

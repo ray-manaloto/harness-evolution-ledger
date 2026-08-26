@@ -6,6 +6,7 @@
 /fnox.local.toml
 /mise.local.toml
 /.codex/local/
+/.firecrawl/
 /.phase0-controls/
 *.log
 *.sarif

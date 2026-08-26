@@ -13,6 +13,9 @@ RULES = ROOT / ".codex/rules/project.rules"
 CONTROLS = (
     (("git", "reset", "--hard"), "forbidden"),
     (("git", "clean", "-fd"), "forbidden"),
+    (("git", "clean", "-n"), "allow"),
+    (("git", "clean", "--dry-run"), "allow"),
+    (("git", "clean", "-d", "-f"), "prompt"),
     (("git", "push", "--force", "origin", "topic"), "forbidden"),
     (("git", "push", "origin", "topic", "--force-with-lease"), "prompt"),
     (("git", "push", "origin", "topic"), "prompt"),

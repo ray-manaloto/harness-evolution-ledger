@@ -7,11 +7,27 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "clean"],
+    pattern = ["git", "clean", ["-f", "-fd", "-df", "-fx", "-xf", "-xdf", "-dxf"]],
     decision = "forbidden",
-    justification = "Repository cleanup requires an inventory and explicit reviewed apply path.",
-    match = ["git clean -fd", "git clean -n"],
+    justification = "Destructive cleanup requires an inventory and explicit reviewed apply path.",
+    match = ["git clean -fd", "git clean -f"],
     not_match = ["git status --short", "git diff --check"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-n", "--dry-run"]],
+    decision = "allow",
+    justification = "Read-only cleanup inventory is the required first step.",
+    match = ["git clean -n", "git clean --dry-run"],
+    not_match = ["git clean -f", "git reset --hard"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-d", "-x"]],
+    decision = "prompt",
+    justification = "Alternate cleanup flags require explicit review after a dry-run inventory.",
+    match = ["git clean -d -f", "git clean -x"],
+    not_match = ["git clean -n", "git clean --dry-run"],
 )
 
 prefix_rule(
