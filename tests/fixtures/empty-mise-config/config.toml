@@ -1,0 +1,2 @@
+# Intentionally empty. Tests use its parent as MISE_CONFIG_DIR to prove the
+# repository does not require tools inherited from the user-level mise config.

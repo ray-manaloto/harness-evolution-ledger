@@ -1,0 +1,58 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 4,
+    "minor": 4,
+    "patch": 3
+  },
+  "configurePresets": [
+    {
+      "name": "host-debug",
+      "displayName": "Host debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/host-debug",
+      "cacheVariables": {
+        "BUILD_TESTING": "ON",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_SCAN_FOR_MODULES": "OFF",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "container-debug",
+      "inherits": "host-debug",
+      "displayName": "Devcontainer debug",
+      "binaryDir": "${sourceDir}/build/container-debug",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "/opt/clang-p2996/bin/clang++",
+        "HEL_P2996_CONTROL": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "host-debug",
+      "configurePreset": "host-debug"
+    },
+    {
+      "name": "container-debug",
+      "configurePreset": "container-debug"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "host-debug",
+      "configurePreset": "host-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "container-debug",
+      "configurePreset": "container-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

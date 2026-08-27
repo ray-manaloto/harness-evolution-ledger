@@ -1,0 +1,119 @@
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Use a recoverable, reviewed repository operation instead of destructive reset.",
+    match = ["git reset --hard", "git reset --hard HEAD~1"],
+    not_match = ["git reset --soft HEAD~1", "git status --short"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-f", "-fd", "-df", "-fx", "-xf", "-xdf", "-dxf"]],
+    decision = "forbidden",
+    justification = "Destructive cleanup requires an inventory and explicit reviewed apply path.",
+    match = ["git clean -fd", "git clean -f"],
+    not_match = ["git status --short", "git diff --check"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-n", "--dry-run"]],
+    decision = "allow",
+    justification = "Read-only cleanup inventory is the required first step.",
+    match = ["git clean -n", "git clean --dry-run"],
+    not_match = ["git clean -f", "git reset --hard"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-d", "-x"]],
+    decision = "prompt",
+    justification = "Alternate cleanup flags require explicit review after a dry-run inventory.",
+    match = ["git clean -d -f", "git clean -x"],
+    not_match = ["git clean -n", "git clean --dry-run"],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "forbidden",
+    justification = "Raw publication is not authorized; use reviewed repository ship and land tasks.",
+    match = ["git push --force", "git push -f origin topic", "git push origin topic", "git push origin topic --force-with-lease", "git push origin HEAD:main"],
+    not_match = ["git fetch origin", "git status --short"],
+)
+
+prefix_rule(
+    pattern = ["git", "merge", "--ff-only", ["origin/main", "refs/remotes/origin/main", "origin/codex/phase-0-bootstrap", "refs/remotes/origin/codex/phase-0-bootstrap"]],
+    decision = "allow",
+    justification = "A fast-forward-only local synchronization fails on divergence and cannot create a merge commit.",
+    match = ["git merge --ff-only origin/main", "git merge --ff-only refs/remotes/origin/main", "git merge --ff-only origin/codex/phase-0-bootstrap", "git merge --ff-only refs/remotes/origin/codex/phase-0-bootstrap"],
+    not_match = ["git merge --ff-only", "git merge origin/main", "git merge --no-ff origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
+)
+
+prefix_rule(
+    pattern = ["git", "merge", ["origin/main", "refs/remotes/origin/main", "origin/codex/phase-0-bootstrap", "refs/remotes/origin/codex/phase-0-bootstrap", "--no-ff", "--ff", "--squash"]],
+    decision = "prompt",
+    justification = "Merge modes that can create commits remain gated by the repository land task.",
+    match = ["git merge origin/main", "git merge origin/codex/phase-0-bootstrap", "git merge --no-ff origin/main", "git merge --ff origin/main", "git merge --squash origin/main"],
+    not_match = ["git merge --ff-only origin/main", "git diff origin/main...HEAD"],
+)
+
+prefix_rule(
+    pattern = ["git", ["rebase", "cherry-pick"]],
+    decision = "prompt",
+    justification = "History-rewriting integration remains gated by the repository land task.",
+    match = ["git rebase origin/main", "git cherry-pick deadbeef"],
+    not_match = ["git diff origin/main...HEAD", "git log --oneline"],
+)
+
+prefix_rule(
+    pattern = ["gh", ["pr", "release"], ["merge", "create"]],
+    decision = "prompt",
+    justification = "Publication requires reviewed ship and land receipts.",
+    match = ["gh pr merge 4", "gh release create v0.1.0"],
+    not_match = ["gh pr view 4", "gh release view v0.1.0"],
+)
+
+prefix_rule(
+    pattern = [["cmake", "ctest", "ninja", "vcpkg", "clang-format", "clang-tidy", "cmake-format", "rumdl", "taplo", "shellcheck", "shfmt"]],
+    decision = "forbidden",
+    justification = "Use the corresponding public mise run task so local hooks and CI share one gate.",
+    match = ["cmake --build build", "ctest --test-dir build", "ninja -C build", "vcpkg install", "clang-format -i x.cpp", "rumdl check ."],
+    not_match = ["mise run build", "mise run test", "mise run bootstrap"],
+)
+
+prefix_rule(
+    pattern = ["mise", ["install", "lock", "upgrade"]],
+    decision = "forbidden",
+    justification = "Tool mutation is exposed only through reviewed repository tasks.",
+    match = ["mise install", "mise lock", "mise upgrade"],
+    not_match = ["mise run bootstrap", "mise run check"],
+)
+
+prefix_rule(
+    pattern = ["mise", "run", ["bootstrap", "doctor", "configure", "build", "test", "fmt", "lint", "check", "hooks:verify", "rules:verify", "plugins:inventory", "receipts:local", "security", "sbom", "tools:lock", "worktree:sync"]],
+    decision = "allow",
+    justification = "These are reviewed repository-owned public tasks.",
+    match = ["mise run check", "mise run hooks:verify", "mise run security"],
+    not_match = ["mise run ship", "mise run land", "mise install"],
+)
+
+prefix_rule(
+    pattern = ["mise", "run", ["ship", "land", "worktree:preserve-sync"]],
+    decision = "prompt",
+    justification = "Repository-owned publication and merge paths require explicit approval.",
+    match = ["mise run ship", "mise run land", "mise run worktree:preserve-sync"],
+    not_match = ["git push origin topic", "gh pr merge 4"],
+)
+
+prefix_rule(
+    pattern = ["git", ["status", "diff", "log", "show", "rev-parse", "branch"]],
+    decision = "allow",
+    justification = "Bounded read-only Git inspection is permitted.",
+    match = ["git status --short", "git diff --check", "git rev-parse HEAD"],
+    not_match = ["git commit -m x", "git push origin main"],
+)
+
+prefix_rule(
+    pattern = ["gh", ["issue", "pr", "run"], ["view", "list", "status"]],
+    decision = "allow",
+    justification = "Bounded read-only GitHub inspection is permitted.",
+    match = ["gh issue view 1", "gh pr list", "gh run view 123"],
+    not_match = ["gh pr merge 4", "gh issue close 1"],
+)

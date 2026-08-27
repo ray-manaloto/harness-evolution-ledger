@@ -1,0 +1,73 @@
+name: phase0
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      exercise_failure_control:
+        description: Run only on a dedicated control ref; this job must fail.
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase0-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out the exact commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ env.TESTED_SHA }}
+          persist-credentials: false
+
+      - name: Install locked mise tools
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4
+        with:
+          version: 2026.8.14
+          install: true
+          cache: true
+
+      - name: Report environment without credential values
+        run: mise run doctor
+
+      - name: Run the shared repository gate
+        run: mise run check
+
+      - name: Verify lifecycle and Git hooks
+        run: mise run hooks:verify
+
+      - name: Verify Codex command policy
+        run: mise run rules:verify
+
+      - name: Scan for secrets
+        run: mise run security
+
+      - name: Generate SBOM
+        run: mise run sbom
+
+      - name: Exercise blocking failure control
+        if: github.event_name == 'workflow_dispatch' && inputs.exercise_failure_control
+        run: mise run control:fail
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase0-sbom-${{ env.TESTED_SHA }}
+          path: build/phase0.spdx.json
+          if-no-files-found: error
+          retention-days: 14

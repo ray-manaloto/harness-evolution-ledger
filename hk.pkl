@@ -1,0 +1,37 @@
+amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl"
+
+local commitGate = new Mapping<String, Step> {
+  ["mise-check"] {
+    check = "mise run check"
+    output_summary = "combined"
+  }
+}
+
+local pushGate = new Mapping<String, Step> {
+  ["mise-check"] {
+    check = "mise run check"
+    output_summary = "combined"
+  }
+  ["mise-policy"] {
+    check = "mise run rules:verify && mise run security && mise run sbom"
+    depends = "mise-check"
+    output_summary = "combined"
+  }
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = false
+    stash = "none"
+    steps = commitGate
+  }
+  ["pre-push"] {
+    fix = false
+    stash = "none"
+    steps = pushGate
+  }
+  ["check"] {
+    fix = false
+    steps = commitGate
+  }
+}

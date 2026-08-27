@@ -1,0 +1,16 @@
+# Trusted project settings only. Models, providers, credentials, profiles,
+# notifications, and telemetry routing belong in machine-local configuration.
+
+[features]
+hooks = true
+
+[shell_environment_policy]
+inherit = "core"
+exclude = [
+  "ANTHROPIC_API_KEY",
+  "ANTHROPIC_AUTH_TOKEN",
+  "CLAUDE_CODE_OAUTH_TOKEN",
+  "CODEX_API_KEY",
+  "OPENAI_API_KEY",
+  "OPENAI_ADMIN_KEY",
+]
