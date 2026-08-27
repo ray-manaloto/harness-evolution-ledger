@@ -75,6 +75,12 @@ stdout, stderr, exit-status, and engine-report hashes. The tracked normalized
 projection is
 `docs/receipts/phase-0/last30days/c-26-static-reflection-positive-control.md`.
 
+An independent clone of commit `3454d71999503ee5c511f954cb574846bc354266`
+passed `setup`, `doctor`, `check`, `hooks:verify`, `rules:verify`, and `security`.
+Its `sbom` task exited 0 but emitted permission warnings outside the clone because
+`syft dir:.` resolved through macOS's `/var` path alias. That result was rejected;
+the task now supplies Git's explicit repository root and requires a fresh rerun.
+
 ## Fresh Codex CLI controls
 
 Root session `01a03b84-b7b1-76c3-b59b-4e4d364e43b1` exited 0 and reported the

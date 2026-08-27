@@ -36,3 +36,7 @@ No `hel` slice-1 tracer files or behavior have been added.
   binary; direct CMake invocation is forbidden by command policy. This accounts
   for the review request to avoid ambient compiler selection without duplicating
   a machine-specific path in `CMakePresets.json`.
+- The first independent clone run made `syft dir:.` resolve too broadly through
+  macOS's `/var` to `/private/var` path alias. It exited 0 with permission
+  warnings, so that SBOM was rejected as proof. The task now passes Syft Git's
+  explicit repository root; a warning-free clean-clone rerun remains required.

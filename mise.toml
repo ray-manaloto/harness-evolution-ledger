@@ -144,7 +144,8 @@ run = '''
 set -euo pipefail
 mkdir -p build
 source_version="$(git rev-parse HEAD)"
-syft dir:. \
+source_root="$(git rev-parse --show-toplevel)"
+syft "dir:${source_root}" \
   --source-name harness-evolution-ledger \
   --source-version "${source_version}" \
   -o spdx-json=build/phase0.spdx.json
