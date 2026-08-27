@@ -39,18 +39,18 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "merge", "--ff-only", ["origin/main", "refs/remotes/origin/main"]],
+    pattern = ["git", "merge", "--ff-only", ["origin/main", "refs/remotes/origin/main", "origin/codex/phase-0-bootstrap", "refs/remotes/origin/codex/phase-0-bootstrap"]],
     decision = "allow",
     justification = "A fast-forward-only local synchronization fails on divergence and cannot create a merge commit.",
-    match = ["git merge --ff-only origin/main", "git merge --ff-only refs/remotes/origin/main"],
+    match = ["git merge --ff-only origin/main", "git merge --ff-only refs/remotes/origin/main", "git merge --ff-only origin/codex/phase-0-bootstrap", "git merge --ff-only refs/remotes/origin/codex/phase-0-bootstrap"],
     not_match = ["git merge --ff-only", "git merge origin/main", "git merge --no-ff origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
 )
 
 prefix_rule(
-    pattern = ["git", "merge", ["origin/main", "--no-ff", "--ff", "--squash"]],
+    pattern = ["git", "merge", ["origin/main", "refs/remotes/origin/main", "origin/codex/phase-0-bootstrap", "refs/remotes/origin/codex/phase-0-bootstrap", "--no-ff", "--ff", "--squash"]],
     decision = "prompt",
     justification = "Merge modes that can create commits remain gated by the repository land task.",
-    match = ["git merge origin/main", "git merge --no-ff origin/main", "git merge --ff origin/main", "git merge --squash origin/main"],
+    match = ["git merge origin/main", "git merge origin/codex/phase-0-bootstrap", "git merge --no-ff origin/main", "git merge --ff origin/main", "git merge --squash origin/main"],
     not_match = ["git merge --ff-only origin/main", "git diff origin/main...HEAD"],
 )
 
