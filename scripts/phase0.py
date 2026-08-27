@@ -92,6 +92,10 @@ EXPLICIT_COMMANDS = {
     "clang-format": ("conda:clang-tools", HOST_LLVM_VERSION, "bin/clang-format"),
     "clang-tidy": ("conda:clang-tools", HOST_LLVM_VERSION, "bin/clang-tidy"),
 }
+SHIP_REMOTE = "origin"
+SHIP_SOURCE_BRANCH = "codex/phase-0-bootstrap-completion"
+SHIP_TARGET_BRANCH = "codex/phase-0-bootstrap"
+SHIP_ORIGIN_URL = "git@github.com:ray-manaloto/harness-evolution-ledger.git"
 
 
 def run(argv: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -406,6 +410,48 @@ def changed() -> int:
     return 0
 
 
+def ship_candidate() -> int:
+    """Publish the single reviewed Phase-0 candidate through a fast-forward push."""
+    rc, branch_name = capture(["git", "branch", "--show-current"])
+    if rc or branch_name != SHIP_SOURCE_BRANCH:
+        print(f"ship blocked: current branch must be {SHIP_SOURCE_BRANCH}", file=sys.stderr)
+        return 2
+    rc, origin_url = capture(["git", "remote", "get-url", SHIP_REMOTE])
+    if rc or origin_url != SHIP_ORIGIN_URL:
+        print("ship blocked: origin URL is not the canonical repository", file=sys.stderr)
+        return 2
+    rc, status = capture(["git", "status", "--porcelain"])
+    if rc or status:
+        print("ship blocked: worktree is not clean", file=sys.stderr)
+        return 2
+
+    source_ref = f"refs/heads/{SHIP_SOURCE_BRANCH}"
+    target_ref = f"refs/heads/{SHIP_TARGET_BRANCH}"
+    tracking_ref = f"refs/remotes/{SHIP_REMOTE}/{SHIP_TARGET_BRANCH}"
+    run(["git", "fetch", "--no-tags", SHIP_REMOTE, f"{target_ref}:{tracking_ref}"])
+    rc, source_sha = capture(["git", "rev-parse", source_ref])
+    if rc:
+        print("ship blocked: source branch is unavailable", file=sys.stderr)
+        return 2
+    ancestry = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", tracking_ref, source_ref],
+        cwd=ROOT,
+        check=False,
+    )
+    if ancestry.returncode:
+        print("ship blocked: publication would not be a fast-forward", file=sys.stderr)
+        return 2
+
+    run(["git", "push", SHIP_REMOTE, f"{source_ref}:{target_ref}"])
+    rc, published = capture(["git", "ls-remote", "--heads", SHIP_REMOTE, target_ref])
+    fields = published.split()
+    if rc or len(fields) != 2 or fields[0] != source_sha or fields[1] != target_ref:
+        print("ship failed: remote target does not match the candidate SHA", file=sys.stderr)
+        return 2
+    print(f"ship published {source_sha} to {SHIP_REMOTE}/{SHIP_TARGET_BRANCH}")
+    return 0
+
+
 def valid_receipt_values(data: dict[str, object]) -> bool:
     if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
         return False
@@ -541,6 +587,8 @@ def main() -> int:
     if command == "deliberate-failure":
         print("intentional phase-0 delivery failure control", file=sys.stderr)
         return 42
+    if command == "ship" and len(sys.argv) == 2:
+        return ship_candidate()
     if command == "delivery-gate" and len(sys.argv) == 3:
         return delivery_gate(sys.argv[2])
     print(f"unknown command: {command}", file=sys.stderr)

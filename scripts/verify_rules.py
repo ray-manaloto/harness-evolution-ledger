@@ -28,6 +28,8 @@ CONTROLS = (
     (("clang-format", "-i", "tests/phase0_smoke.cpp"), "forbidden"),
     (("mise", "install"), "forbidden"),
     (("mise", "run", "build"), "allow"),
+    (("mise", "run", "ship"), "prompt"),
+    (("mise", "run", "land"), "prompt"),
 )
 
 

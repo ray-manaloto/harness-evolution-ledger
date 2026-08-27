@@ -57,6 +57,23 @@ class Phase0PolicyTests(unittest.TestCase):
         self.assertEqual(42, result.returncode)
         self.assertIn("intentional phase-0 delivery failure control", result.stderr)
 
+    def test_ship_rejects_a_dirty_worktree(self) -> None:
+        marker = ROOT / ".phase0-ship-test-marker"
+        marker.write_text("negative control\n", encoding="utf-8")
+        try:
+            result = subprocess.run(
+                [sys.executable, str(PHASE0), "ship"],
+                cwd=ROOT,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        finally:
+            marker.unlink(missing_ok=True)
+        self.assertEqual(2, result.returncode)
+        self.assertIn("worktree is not clean", result.stderr)
+
     def test_forged_delivery_receipt_does_not_unlock_gate(self) -> None:
         marker = ROOT / "docs/receipts/phase-0/merged.json"
         original = marker.read_bytes() if marker.exists() else None

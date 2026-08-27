@@ -183,8 +183,8 @@ description = "Deliberately fail so CI can prove the gate blocks delivery"
 run = "python3 scripts/phase0.py deliberate-failure"
 
 [tasks.ship]
-description = "Verify phase-0 shipment prerequisites (publication remains gated)"
-run = "python3 scripts/phase0.py delivery-gate ship"
+description = "Publish the reviewed phase-0 candidate through an exact fast-forward"
+run = "python3 scripts/phase0.py ship"
 
 [tasks.land]
 description = "Verify phase-0 landing prerequisites (merge remains gated)"

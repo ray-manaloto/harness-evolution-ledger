@@ -79,6 +79,14 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["mise", "run", ["ship", "land"]],
+    decision = "prompt",
+    justification = "Repository-owned publication and merge paths require explicit approval.",
+    match = ["mise run ship", "mise run land"],
+    not_match = ["git push origin topic", "gh pr merge 4"],
+)
+
+prefix_rule(
     pattern = ["git", ["status", "diff", "log", "show", "rev-parse", "branch"]],
     decision = "allow",
     justification = "Bounded read-only Git inspection is permitted.",
