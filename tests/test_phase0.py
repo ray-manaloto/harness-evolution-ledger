@@ -95,6 +95,62 @@ class Phase0PolicyTests(unittest.TestCase):
         self.assertEqual(2, result.returncode)
         self.assertIn("schema is invalid", result.stderr)
 
+    def test_prototype_review_bypass_is_explicit_and_opt_in(self) -> None:
+        marker = ROOT / "docs/receipts/phase-0/merged.json"
+        original = marker.read_bytes() if marker.exists() else None
+        head = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+        ).stdout.strip()
+        receipt = {
+            "schema": 1,
+            "pr": 4,
+            "remote_sha": head,
+            "review": {
+                "decision": "PROTOTYPE_BYPASS",
+                "authorization": "--prototype-bypass-review",
+            },
+            "checks": {"check": "SUCCESS"},
+        }
+        marker.write_text(json.dumps(receipt), encoding="utf-8")
+        try:
+            default_result = subprocess.run(
+                [sys.executable, str(PHASE0), "delivery-gate", "land"],
+                cwd=ROOT,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            bypass_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(PHASE0),
+                    "delivery-gate",
+                    "land",
+                    "--prototype-bypass-review",
+                ],
+                cwd=ROOT,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        finally:
+            if original is None:
+                marker.unlink(missing_ok=True)
+            else:
+                marker.write_bytes(original)
+        self.assertEqual(2, default_result.returncode)
+        self.assertIn("schema is invalid", default_result.stderr)
+        self.assertEqual(2, bypass_result.returncode)
+        self.assertNotIn("schema is invalid", bypass_result.stderr)
+        self.assertIn("explicit prototype review bypass is active", bypass_result.stderr)
+        self.assertIn("origin/main does not equal receipt SHA", bypass_result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

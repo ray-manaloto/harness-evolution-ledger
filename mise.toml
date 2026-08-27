@@ -188,4 +188,14 @@ run = "python3 scripts/phase0.py ship"
 
 [tasks.land]
 description = "Verify phase-0 landing prerequisites (merge remains gated)"
-run = "python3 scripts/phase0.py delivery-gate land"
+usage = 'flag "--prototype-bypass-review" help="Accept an explicit prototype review-bypass receipt"'
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+args=()
+if [[ -n "${usage_prototype_bypass_review:-}" ]]; then
+  args+=(--prototype-bypass-review)
+fi
+python3 scripts/phase0.py delivery-gate land "${args[@]}"
+'''

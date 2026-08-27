@@ -452,7 +452,9 @@ def ship_candidate() -> int:
     return 0
 
 
-def valid_receipt_values(data: dict[str, object]) -> bool:
+def valid_receipt_values(
+    data: dict[str, object], prototype_bypass_review: bool = False
+) -> bool:
     if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
         return False
     pr = data.get("pr")
@@ -463,8 +465,20 @@ def valid_receipt_values(data: dict[str, object]) -> bool:
         return False
     if len(remote_sha) != 40 or any(character not in "0123456789abcdef" for character in remote_sha):
         return False
-    if not isinstance(review, dict) or review.get("decision") != "APPROVED":
+    if not isinstance(review, dict):
         return False
+    if prototype_bypass_review:
+        if review != {
+            "decision": "PROTOTYPE_BYPASS",
+            "authorization": "--prototype-bypass-review",
+        }:
+            return False
+    elif review.get("decision") != "APPROVED":
+        return False
+    if prototype_bypass_review:
+        return isinstance(checks, dict) and bool(checks) and all(
+            value == "SUCCESS" for value in checks.values()
+        )
     reviewer = review.get("reviewer")
     if not isinstance(reviewer, str) or not reviewer:
         return False
@@ -498,7 +512,11 @@ def live_checks_match(live: dict[str, object], declared: dict[str, object]) -> b
     return set(declared).issubset(successful_names)
 
 
-def live_delivery_matches(live: dict[str, object], data: dict[str, object]) -> bool:
+def live_delivery_matches(
+    live: dict[str, object],
+    data: dict[str, object],
+    prototype_bypass_review: bool = False,
+) -> bool:
     review = data["review"]
     checks = data["checks"]
     merge_commit = live.get("mergeCommit")
@@ -506,20 +524,30 @@ def live_delivery_matches(live: dict[str, object], data: dict[str, object]) -> b
     return (
         live.get("state") == "MERGED"
         and merged_sha == data["remote_sha"]
-        and live_review_approved(live, review["reviewer"])
+        and (
+            prototype_bypass_review
+            or live_review_approved(live, review["reviewer"])
+        )
         and live_checks_match(live, checks)
     )
 
 
-def delivery_gate(operation: str) -> int:
+def delivery_gate(operation: str, prototype_bypass_review: bool = False) -> int:
     marker = ROOT / "docs/receipts/phase-0/merged.json"
     if not marker.is_file():
         print(f"{operation} blocked: phase-0 merged receipt is absent", file=sys.stderr)
         return 2
     data = json.loads(marker.read_text(encoding="utf-8"))
-    if not isinstance(data, dict) or not valid_receipt_values(data):
+    if not isinstance(data, dict) or not valid_receipt_values(
+        data, prototype_bypass_review
+    ):
         print(f"{operation} blocked: merged receipt schema is invalid", file=sys.stderr)
         return 2
+    if prototype_bypass_review:
+        print(
+            f"{operation}: explicit prototype review bypass is active",
+            file=sys.stderr,
+        )
     pr = data.get("pr")
     remote_sha = data.get("remote_sha")
     rc, local_head = capture(["git", "rev-parse", "HEAD"])
@@ -545,7 +573,9 @@ def delivery_gate(operation: str) -> int:
         print(f"{operation} blocked: live PR verification unavailable", file=sys.stderr)
         return 2
     live = json.loads(result.stdout)
-    if not isinstance(live, dict) or not live_delivery_matches(live, data):
+    if not isinstance(live, dict) or not live_delivery_matches(
+        live, data, prototype_bypass_review
+    ):
         print(f"{operation} blocked: live PR, review, SHA, or checks do not match", file=sys.stderr)
         return 2
     print(f"{operation} prerequisites verified live at {remote_sha}")
@@ -593,8 +623,11 @@ def dispatch_policy(command: str, argv: list[str]) -> int | None:
         return 42
     if command == "ship" and len(argv) == 2:
         return ship_candidate()
-    if command == "delivery-gate" and len(argv) == 3:
-        return delivery_gate(argv[2])
+    if command == "delivery-gate" and len(argv) in (3, 4):
+        prototype_bypass_review = len(argv) == 4 and argv[3] == "--prototype-bypass-review"
+        if len(argv) == 4 and not prototype_bypass_review:
+            return None
+        return delivery_gate(argv[2], prototype_bypass_review)
     return None
 
 
