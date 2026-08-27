@@ -183,8 +183,26 @@ description = "Deliberately fail so CI can prove the gate blocks delivery"
 run = "python3 scripts/phase0.py deliberate-failure"
 
 [tasks.ship]
-description = "Publish the reviewed phase-0 candidate through an exact fast-forward"
-run = "python3 scripts/phase0.py ship"
+description = "Publish the candidate and fast-forward the canonical checkout"
+usage = 'flag "--preserve-canonical" effect="destructive" help="Stash protected canonical-checkout changes before synchronization"'
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+args=()
+if [[ -n "${usage_preserve_canonical:-}" ]]; then
+  args+=(--preserve-canonical)
+fi
+python3 scripts/phase0.py ship "${args[@]}"
+'''
+
+[tasks."worktree:sync"]
+description = "Fast-forward the clean canonical checkout from the accepted remote branch"
+run = "python3 scripts/phase0.py worktree-sync"
+
+[tasks."worktree:preserve-sync"]
+description = "Preserve dirty canonical state in a Git stash, then fast-forward it"
+run = "python3 scripts/phase0.py worktree-sync --preserve-dirty"
 
 [tasks.land]
 description = "Verify phase-0 landing prerequisites (merge remains gated)"

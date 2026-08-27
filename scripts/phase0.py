@@ -103,10 +103,29 @@ def run(argv: list[str], *, check: bool = True) -> subprocess.CompletedProcess[s
     return subprocess.run(argv, cwd=ROOT, check=check, text=True)
 
 
+def run_in(
+    repository: Path, argv: list[str], *, check: bool = True
+) -> subprocess.CompletedProcess[str]:
+    print("+", " ".join(argv), f"(cwd={repository})", flush=True)
+    return subprocess.run(argv, cwd=repository, check=check, text=True)
+
+
 def capture(argv: list[str]) -> tuple[int, str]:
     result = subprocess.run(
         argv,
         cwd=ROOT,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    return result.returncode, result.stdout.strip()
+
+
+def capture_in(repository: Path, argv: list[str]) -> tuple[int, str]:
+    result = subprocess.run(
+        argv,
+        cwd=repository,
         check=False,
         text=True,
         stdout=subprocess.PIPE,
@@ -410,7 +429,107 @@ def changed() -> int:
     return 0
 
 
-def ship_candidate() -> int:
+def canonical_checkout(repository: Path = ROOT) -> Path:
+    rc, common_dir = capture_in(
+        repository,
+        ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+    )
+    if rc or not common_dir:
+        raise RuntimeError("canonical checkout unavailable: Git common directory not found")
+    common_path = Path(common_dir).resolve()
+    if common_path.name != ".git" or not common_path.is_dir():
+        raise RuntimeError("canonical checkout unavailable: Git common directory is not a checkout")
+    checkout = common_path.parent
+    rc, top_level = capture_in(checkout, ["git", "rev-parse", "--show-toplevel"])
+    if rc or Path(top_level).resolve() != checkout:
+        raise RuntimeError("canonical checkout unavailable: main worktree identity mismatch")
+    return checkout
+
+
+def prepare_canonical_checkout(
+    *, preserve_dirty: bool, repository: Path = ROOT, expected_origin: str = SHIP_ORIGIN_URL
+) -> tuple[Path, str | None]:
+    checkout = canonical_checkout(repository)
+    rc, branch_name = capture_in(checkout, ["git", "branch", "--show-current"])
+    if rc or branch_name != SHIP_TARGET_BRANCH:
+        raise RuntimeError(
+            f"canonical checkout must be on {SHIP_TARGET_BRANCH}, observed "
+            f"{branch_name or 'detached'}"
+        )
+    rc, origin_url = capture_in(checkout, ["git", "remote", "get-url", SHIP_REMOTE])
+    if rc or origin_url != expected_origin:
+        raise RuntimeError("canonical checkout origin is not the expected repository")
+    rc, status = capture_in(checkout, ["git", "status", "--porcelain"])
+    if rc:
+        raise RuntimeError("canonical checkout status is unavailable")
+    stash_sha: str | None = None
+    if status:
+        if not preserve_dirty:
+            raise RuntimeError(
+                "canonical checkout is dirty; use the explicit preserve-and-sync path"
+            )
+        run_in(
+            checkout,
+            [
+                "git",
+                "stash",
+                "push",
+                "--include-untracked",
+                "--message",
+                "hel-preserve-before-worktree-sync",
+            ],
+        )
+        rc, remaining = capture_in(checkout, ["git", "status", "--porcelain"])
+        if rc or remaining:
+            raise RuntimeError("canonical checkout remained dirty after preservation")
+        rc, stash_sha = capture_in(checkout, ["git", "rev-parse", "refs/stash"])
+        if rc or not stash_sha:
+            raise RuntimeError("canonical checkout preservation receipt is unavailable")
+        print(f"canonical_preserved_stash={stash_sha}")
+    return checkout, stash_sha
+
+
+def sync_canonical_checkout(
+    *,
+    preserve_dirty: bool = False,
+    repository: Path = ROOT,
+    expected_origin: str = SHIP_ORIGIN_URL,
+) -> int:
+    try:
+        checkout, _ = prepare_canonical_checkout(
+            preserve_dirty=preserve_dirty,
+            repository=repository,
+            expected_origin=expected_origin,
+        )
+    except RuntimeError as error:
+        print(f"worktree sync blocked: {error}", file=sys.stderr)
+        return 2
+    target_ref = f"refs/heads/{SHIP_TARGET_BRANCH}"
+    tracking_ref = f"refs/remotes/{SHIP_REMOTE}/{SHIP_TARGET_BRANCH}"
+    run_in(
+        checkout,
+        ["git", "fetch", "--no-tags", SHIP_REMOTE, f"{target_ref}:{tracking_ref}"],
+    )
+    ancestry = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", "HEAD", tracking_ref],
+        cwd=checkout,
+        check=False,
+    )
+    if ancestry.returncode:
+        print("worktree sync blocked: canonical checkout has diverged", file=sys.stderr)
+        return 2
+    run_in(checkout, ["git", "merge", "--ff-only", f"{SHIP_REMOTE}/{SHIP_TARGET_BRANCH}"])
+    rc, local_head = capture_in(checkout, ["git", "rev-parse", "HEAD"])
+    rc_remote, remote_head = capture_in(checkout, ["git", "rev-parse", tracking_ref])
+    rc_status, status = capture_in(checkout, ["git", "status", "--porcelain"])
+    if rc or rc_remote or rc_status or local_head != remote_head or status:
+        print("worktree sync failed: canonical checkout did not converge cleanly", file=sys.stderr)
+        return 2
+    print(f"worktree sync updated {checkout} to {local_head}")
+    return 0
+
+
+def ship_candidate(preserve_canonical: bool = False) -> int:
     """Publish the single reviewed Phase-0 candidate through a fast-forward push."""
     rc, branch_name = capture(["git", "branch", "--show-current"])
     if rc or branch_name != SHIP_SOURCE_BRANCH:
@@ -423,6 +542,14 @@ def ship_candidate() -> int:
     rc, status = capture(["git", "status", "--porcelain"])
     if rc or status:
         print("ship blocked: worktree is not clean", file=sys.stderr)
+        return 2
+
+    try:
+        checkout, _ = prepare_canonical_checkout(
+            preserve_dirty=preserve_canonical,
+        )
+    except RuntimeError as error:
+        print(f"ship blocked: {error}", file=sys.stderr)
         return 2
 
     source_ref = f"refs/heads/{SHIP_SOURCE_BRANCH}"
@@ -441,6 +568,14 @@ def ship_candidate() -> int:
     if ancestry.returncode:
         print("ship blocked: publication would not be a fast-forward", file=sys.stderr)
         return 2
+    canonical_ancestry = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", "HEAD", source_ref],
+        cwd=checkout,
+        check=False,
+    )
+    if canonical_ancestry.returncode:
+        print("ship blocked: canonical checkout has diverged", file=sys.stderr)
+        return 2
 
     run(["git", "push", SHIP_REMOTE, f"{source_ref}:{target_ref}"])
     rc, published = capture(["git", "ls-remote", "--heads", SHIP_REMOTE, target_ref])
@@ -449,6 +584,13 @@ def ship_candidate() -> int:
         print("ship failed: remote target does not match the candidate SHA", file=sys.stderr)
         return 2
     print(f"ship published {source_sha} to {SHIP_REMOTE}/{SHIP_TARGET_BRANCH}")
+    sync_result = sync_canonical_checkout()
+    if sync_result:
+        print(
+            f"ship published but canonical synchronization failed for {checkout}",
+            file=sys.stderr,
+        )
+        return sync_result
     return 0
 
 
@@ -623,8 +765,16 @@ def dispatch_policy(command: str, argv: list[str]) -> int | None:
     if command == "deliberate-failure":
         print("intentional phase-0 delivery failure control", file=sys.stderr)
         return 42
-    if command == "ship" and len(argv) == 2:
-        return ship_candidate()
+    if command == "ship" and len(argv) in (2, 3):
+        preserve_canonical = len(argv) == 3 and argv[2] == "--preserve-canonical"
+        if len(argv) == 3 and not preserve_canonical:
+            return None
+        return ship_candidate(preserve_canonical)
+    if command == "worktree-sync" and len(argv) in (2, 3):
+        preserve_dirty = len(argv) == 3 and argv[2] == "--preserve-dirty"
+        if len(argv) == 3 and not preserve_dirty:
+            return None
+        return sync_canonical_checkout(preserve_dirty=preserve_dirty)
     if command == "delivery-gate" and len(argv) in (3, 4):
         prototype_bypass_review = len(argv) == 4 and argv[3] == "--prototype-bypass-review"
         if len(argv) == 4 and not prototype_bypass_review:

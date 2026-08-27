@@ -87,7 +87,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["mise", "run", ["bootstrap", "doctor", "configure", "build", "test", "fmt", "lint", "check", "hooks:verify", "rules:verify", "plugins:inventory", "receipts:local", "security", "sbom", "tools:lock"]],
+    pattern = ["mise", "run", ["bootstrap", "doctor", "configure", "build", "test", "fmt", "lint", "check", "hooks:verify", "rules:verify", "plugins:inventory", "receipts:local", "security", "sbom", "tools:lock", "worktree:sync"]],
     decision = "allow",
     justification = "These are reviewed repository-owned public tasks.",
     match = ["mise run check", "mise run hooks:verify", "mise run security"],
@@ -95,10 +95,10 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["mise", "run", ["ship", "land"]],
+    pattern = ["mise", "run", ["ship", "land", "worktree:preserve-sync"]],
     decision = "prompt",
     justification = "Repository-owned publication and merge paths require explicit approval.",
-    match = ["mise run ship", "mise run land"],
+    match = ["mise run ship", "mise run land", "mise run worktree:preserve-sync"],
     not_match = ["git push origin topic", "gh pr merge 4"],
 )
 
