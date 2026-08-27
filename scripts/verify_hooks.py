@@ -17,6 +17,7 @@ HOOK = ROOT / "scripts/codex_hook.py"
 
 def invoke(event: dict[str, object], **extra_env: str) -> subprocess.CompletedProcess[str]:
     env = dict(os.environ)
+    env["HEL_HOOK_TEST_MODE"] = "1"
     env.update(extra_env)
     return subprocess.run(
         [sys.executable, str(HOOK)],
@@ -70,6 +71,18 @@ def codex_controls() -> None:
         "destructive Git control was not denied",
     )
 
+    multiline_destructive = {
+        **allowed,
+        "tool_use_id": "multiline-destructive",
+        "tool_input": {"command": "git status --short\ngit reset --hard HEAD~1"},
+    }
+    result = invoke(multiline_destructive, HEL_HOOK_TEST_BRANCH="codex/phase-0-bootstrap")
+    payload = json.loads(result.stdout)
+    expect(
+        payload["hookSpecificOutput"]["permissionDecision"] == "deny",
+        "multiline destructive Git control was not denied",
+    )
+
     default_mutation = {
         **allowed,
         "tool_use_id": "default-branch",
@@ -97,6 +110,14 @@ def codex_controls() -> None:
     result = invoke(shell_outside, HEL_HOOK_TEST_BRANCH="codex/phase-0-bootstrap")
     payload = json.loads(result.stdout)
     expect(payload["hookSpecificOutput"]["permissionDecision"] == "deny", "shell outside write allowed")
+
+    null_sink = {
+        **allowed,
+        "tool_use_id": "null-sink",
+        "tool_input": {"command": "mise lock --dry-run > /dev/null"},
+    }
+    result = invoke(null_sink, HEL_HOOK_TEST_BRANCH="codex/phase-0-bootstrap")
+    expect(result.returncode == 0 and result.stdout == "", f"/dev/null control failed: {result.stderr}")
 
     remote_default = {
         **allowed,

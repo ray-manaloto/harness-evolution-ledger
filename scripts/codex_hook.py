@@ -20,21 +20,22 @@ MAX_STRING = 2_048
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BRANCHES = {"main", "master"}
 SENSITIVE_NAME = re.compile(r"(?i)(api[_-]?key|authorization|bearer|credential|password|secret|token)")
+SHELL_BOUNDARY = r"(?:^|[;&|]\s*|\n\s*)"
 DESTRUCTIVE_GIT = (
-    re.compile(r"(?:^|[;&|]\s*)git\s+reset\s+--hard(?:\s|$)"),
-    re.compile(r"(?:^|[;&|]\s*)git\s+clean\s+-[^\n;&|]*f"),
-    re.compile(r"(?:^|[;&|]\s*)git\s+(?:checkout|restore)\s+--\s"),
-    re.compile(r"(?:^|[;&|]\s*)git\s+push\b[^\n;&|]*(?:--force(?:-with-lease)?|-f)(?:\s|$)"),
+    re.compile(rf"{SHELL_BOUNDARY}git\s+reset\s+--hard(?:\s|$)"),
+    re.compile(rf"{SHELL_BOUNDARY}git\s+clean\s+-[^\n;&|]*f"),
+    re.compile(rf"{SHELL_BOUNDARY}git\s+(?:checkout|restore)\s+--\s"),
+    re.compile(rf"{SHELL_BOUNDARY}git\s+push\b[^\n;&|]*(?:--force(?:-with-lease)?|-f)(?:\s|$)"),
 )
 DEFAULT_BRANCH_MUTATION = re.compile(
-    r"(?:^|[;&|]\s*)git\s+(?:commit|merge|rebase|cherry-pick|push)(?:\s|$)"
+    rf"{SHELL_BOUNDARY}git\s+(?:commit|merge|rebase|cherry-pick|push)(?:\s|$)"
 )
 REMOTE_DEFAULT_PUSH = re.compile(
-    r"(?:^|[;&|]\s*)git\s+push\b[^\n;&|]*"
+    rf"{SHELL_BOUNDARY}git\s+push\b[^\n;&|]*"
     r"(?:(?:HEAD|[^:\s]+):)?(?:refs/heads/)?(?:main|master)(?:\s|$)"
 )
 BROAD_CREDENTIAL_READ = re.compile(
-    r"(?:^|[;&|]\s*)(?:env|printenv|set)\s*(?=$|[;&|])|"
+    rf"{SHELL_BOUNDARY}(?:env|printenv|set)\s*(?=$|[;&|\n])|"
     r"(?:printenv|echo)\s+\$?(?:ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|"
     r"DOPPLER_TOKEN|OPENAI_ADMIN_KEY|OPENAI_API_KEY)(?:\s|$)|"
     r"(?:\.aws|\.config/(?:gh|doppler)|Keychains|fnox\.local\.toml)"
@@ -74,8 +75,14 @@ def git_value(cwd: Path, *args: str) -> str:
 
 
 def branch(cwd: Path) -> str:
-    override = os.environ.get("HEL_HOOK_TEST_BRANCH")
+    override = test_override("HEL_HOOK_TEST_BRANCH")
     return override if override is not None else git_value(cwd, "branch", "--show-current")
+
+
+def test_override(name: str) -> str | None:
+    if os.environ.get("HEL_HOOK_TEST_MODE") != "1":
+        return None
+    return os.environ.get(name)
 
 
 def command_from(event: dict[str, Any]) -> str:
@@ -97,6 +104,8 @@ def patch_paths(command: str) -> list[Path]:
 
 def outside_root(path: Path) -> bool:
     resolved = path.resolve() if path.is_absolute() else (ROOT / path).resolve()
+    if resolved == Path("/dev/null"):
+        return False
     return resolved != ROOT and ROOT not in resolved.parents
 
 
@@ -119,7 +128,7 @@ def shell_write_targets(command: str, cwd: Path) -> list[Path]:
         path = token_path(match.group(1), cwd)
         if path is not None:
             targets.append(path)
-    for segment in re.split(r"(?:&&|\|\||[;&|])", command):
+    for segment in re.split(r"(?:&&|\|\||[;&|\n])", command):
         try:
             argv = shlex.split(segment)
         except ValueError:
@@ -156,31 +165,42 @@ def deny(reason: str) -> int:
     return 0
 
 
-def pre_tool(event: dict[str, Any]) -> int:
-    command = command_from(event)
+def command_denial_reason(command: str, cwd: Path) -> str | None:
     for pattern in DESTRUCTIVE_GIT:
         if pattern.search(command):
-            return deny("Destructive Git operation blocked; use a reviewed repository task.")
-    cwd = Path(event["cwd"])
+            return "Destructive Git operation blocked; use a reviewed repository task."
     if REMOTE_DEFAULT_PUSH.search(command):
-        return deny("Direct push to a remote default branch blocked; use the reviewed land path.")
+        return "Direct push to a remote default branch blocked; use the reviewed land path."
     if branch(cwd) in DEFAULT_BRANCHES and DEFAULT_BRANCH_MUTATION.search(command):
-        return deny("Direct default-branch mutation blocked; use an isolated branch or worktree.")
+        return "Direct default-branch mutation blocked; use an isolated branch or worktree."
     if BROAD_CREDENTIAL_READ.search(command):
-        return deny("Broad credential or environment exposure blocked; use presence-only doctor checks.")
+        return "Broad credential or environment exposure blocked; use presence-only doctor checks."
+    for sibling in ("/dotfiles/", "/knowledge-base/", "/local-model-eval/"):
+        if sibling in command and re.search(r"(?:>|\b(?:rm|mv|cp|git\s+(?:commit|push))\b)", command):
+            return "Sibling-repository mutation blocked by project scope."
+    return None
+
+
+def write_denial_reason(event: dict[str, Any], command: str, cwd: Path) -> str | None:
     if event.get("tool_name") == "apply_patch":
         paths = patch_paths(command)
         if not paths:
-            return deny("Patch target could not be resolved safely.")
+            return "Patch target could not be resolved safely."
         if any(outside_root(path) for path in paths):
-            return deny("Write outside the authorized repository blocked.")
+            return "Write outside the authorized repository blocked."
     if event.get("tool_name") == "Bash":
         targets = shell_write_targets(command, cwd)
         if any(outside_root(path) for path in targets):
-            return deny("Shell write outside the authorized repository blocked.")
-    for sibling in ("/dotfiles/", "/knowledge-base/"):
-        if sibling in command and re.search(r"(?:>|\b(?:rm|mv|cp|git\s+(?:commit|push))\b)", command):
-            return deny("Sibling-repository mutation blocked by project scope.")
+            return "Shell write outside the authorized repository blocked."
+    return None
+
+
+def pre_tool(event: dict[str, Any]) -> int:
+    command = command_from(event)
+    cwd = Path(event["cwd"])
+    reason = command_denial_reason(command, cwd) or write_denial_reason(event, command, cwd)
+    if reason:
+        return deny(reason)
     return 0
 
 
@@ -204,7 +224,7 @@ def redact(value: Any, key: str = "") -> Any:
 
 
 def event_log_path(cwd: Path) -> Path:
-    override = os.environ.get("HEL_HOOK_LOG")
+    override = test_override("HEL_HOOK_LOG")
     if override:
         return Path(override)
     git_dir = git_value(cwd, "rev-parse", "--git-dir")
@@ -254,11 +274,11 @@ def session_start(event: dict[str, Any]) -> int:
 
 
 def stop(event: dict[str, Any]) -> int:
-    if os.environ.get("HEL_HOOK_SKIP_CHECKS") == "1":
+    if test_override("HEL_HOOK_SKIP_CHECKS") == "1":
         print(json.dumps({"continue": True}))
         return 0
     argv = ["mise", "run", "check:changed"]
-    if os.environ.get("HEL_HOOK_TEST_STOP_FAILURE") == "1":
+    if test_override("HEL_HOOK_TEST_STOP_FAILURE") == "1":
         argv = [sys.executable, "-c", "raise SystemExit(73)"]
     result = subprocess.run(
         argv,

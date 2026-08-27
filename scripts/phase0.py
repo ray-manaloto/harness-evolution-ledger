@@ -290,34 +290,76 @@ def changed() -> int:
     return 0
 
 
+def valid_receipt_values(data: dict[str, object]) -> bool:
+    if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
+        return False
+    pr = data.get("pr")
+    remote_sha = data.get("remote_sha")
+    review = data.get("review")
+    checks = data.get("checks")
+    if not isinstance(pr, int) or not isinstance(remote_sha, str):
+        return False
+    if len(remote_sha) != 40 or any(character not in "0123456789abcdef" for character in remote_sha):
+        return False
+    if not isinstance(review, dict) or review.get("decision") != "APPROVED":
+        return False
+    reviewer = review.get("reviewer")
+    if not isinstance(reviewer, str) or not reviewer:
+        return False
+    return isinstance(checks, dict) and bool(checks) and all(
+        value == "SUCCESS" for value in checks.values()
+    )
+
+
+def live_review_approved(live: dict[str, object], reviewer: str) -> bool:
+    author_value = live.get("author")
+    author = author_value.get("login") if isinstance(author_value, dict) else None
+    reviews = live.get("reviews")
+    if not isinstance(reviews, list):
+        return False
+    return reviewer != author and any(
+        isinstance(item, dict)
+        and item.get("state") == "APPROVED"
+        and isinstance(item.get("author"), dict)
+        and item["author"].get("login") == reviewer
+        for item in reviews
+    )
+
+
+def live_checks_match(live: dict[str, object], declared: dict[str, object]) -> bool:
+    checks = live.get("statusCheckRollup")
+    if not isinstance(checks, list) or not checks:
+        return False
+    if not all(isinstance(item, dict) and item.get("conclusion") == "SUCCESS" for item in checks):
+        return False
+    successful_names = {item.get("name") or item.get("context") for item in checks}
+    return set(declared).issubset(successful_names)
+
+
+def live_delivery_matches(live: dict[str, object], data: dict[str, object]) -> bool:
+    review = data["review"]
+    checks = data["checks"]
+    merge_commit = live.get("mergeCommit")
+    merged_sha = merge_commit.get("oid") if isinstance(merge_commit, dict) else None
+    return (
+        live.get("state") == "MERGED"
+        and merged_sha == data["remote_sha"]
+        and live_review_approved(live, review["reviewer"])
+        and live_checks_match(live, checks)
+    )
+
+
 def delivery_gate(operation: str) -> int:
     marker = ROOT / "docs/receipts/phase-0/merged.json"
     if not marker.is_file():
         print(f"{operation} blocked: phase-0 merged receipt is absent", file=sys.stderr)
         return 2
     data = json.loads(marker.read_text(encoding="utf-8"))
-    if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
+    if not isinstance(data, dict) or not valid_receipt_values(data):
         print(f"{operation} blocked: merged receipt schema is invalid", file=sys.stderr)
         return 2
     pr = data.get("pr")
     remote_sha = data.get("remote_sha")
-    review = data.get("review")
-    checks = data.get("checks")
-    if (
-        not isinstance(pr, int)
-        or not isinstance(remote_sha, str)
-        or len(remote_sha) != 40
-        or not all(character in "0123456789abcdef" for character in remote_sha)
-        or not isinstance(review, dict)
-        or review.get("decision") != "APPROVED"
-        or not isinstance(review.get("reviewer"), str)
-        or not review["reviewer"]
-        or not isinstance(checks, dict)
-        or not checks
-        or any(value != "SUCCESS" for value in checks.values())
-    ):
-        print(f"{operation} blocked: merged receipt values are invalid", file=sys.stderr)
-        return 2
     rc, local_head = capture(["git", "rev-parse", "HEAD"])
     if rc or local_head != remote_sha:
         print(f"{operation} blocked: local HEAD does not equal receipt SHA", file=sys.stderr)
@@ -341,32 +383,7 @@ def delivery_gate(operation: str) -> int:
         print(f"{operation} blocked: live PR verification unavailable", file=sys.stderr)
         return 2
     live = json.loads(result.stdout)
-    author = live.get("author", {}).get("login")
-    reviewer = review["reviewer"]
-    approved = any(
-        item.get("state") == "APPROVED"
-        and item.get("author", {}).get("login") == reviewer
-        and reviewer != author
-        for item in live.get("reviews", [])
-    )
-    live_checks = live.get("statusCheckRollup", [])
-    successful_names = {
-        item.get("name") or item.get("context")
-        for item in live_checks
-        if item.get("conclusion") == "SUCCESS"
-    }
-    green = bool(live_checks) and all(
-        item.get("conclusion") == "SUCCESS" for item in live_checks
-    )
-    declared_checks_match = set(checks).issubset(successful_names)
-    merged_sha = (live.get("mergeCommit") or {}).get("oid")
-    if (
-        live.get("state") != "MERGED"
-        or merged_sha != remote_sha
-        or not approved
-        or not green
-        or not declared_checks_match
-    ):
+    if not isinstance(live, dict) or not live_delivery_matches(live, data):
         print(f"{operation} blocked: live PR, review, SHA, or checks do not match", file=sys.stderr)
         return 2
     print(f"{operation} prerequisites verified live at {remote_sha}")
@@ -378,8 +395,17 @@ def main() -> int:
         print("usage: phase0.py COMMAND", file=sys.stderr)
         return 2
     command = sys.argv[1]
-    if command == "doctor":
-        return doctor()
+    simple_commands = {
+        "doctor": doctor,
+        "format": lambda: format_files(False),
+        "format-check": lambda: format_files(True),
+        "lint": lint,
+        "secrets-control": secrets_control,
+        "consistency": consistency,
+        "changed": changed,
+    }
+    if command in simple_commands and len(sys.argv) == 2:
+        return simple_commands[command]()
     if command == "configure":
         argv = ["cmake", "--preset", cmake_preset()]
         if os.environ.get("DEVCONTAINER") != "true":
@@ -392,21 +418,9 @@ def main() -> int:
     if command == "ctest":
         run(["ctest", "--preset", cmake_preset()])
         return 0
-    if command == "format":
-        return format_files(False)
-    if command == "format-check":
-        return format_files(True)
-    if command == "lint":
-        return lint()
     if command == "config-policy":
         path = Path(sys.argv[2]) if len(sys.argv) == 3 else None
         return config_policy(path)
-    if command == "secrets-control":
-        return secrets_control()
-    if command == "consistency":
-        return consistency()
-    if command == "changed":
-        return changed()
     if command == "deliberate-failure":
         print("intentional phase-0 delivery failure control", file=sys.stderr)
         return 42

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
+            "command": "mise exec -- python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
             "timeout": 10,
             "statusMessage": "Checking project and tool state",
             "additionalContextLimit": 1200
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
+            "command": "mise exec -- python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
             "timeout": 5,
             "statusMessage": "Applying repository mutation policy"
           }
@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
+            "command": "mise exec -- python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
             "timeout": 5,
             "statusMessage": "Recording bounded command evidence"
           }
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
+            "command": "mise exec -- python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
             "timeout": 30,
             "statusMessage": "Checking changed files"
           }
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
+            "command": "mise exec -- python3 \"$(git rev-parse --show-toplevel)/scripts/codex_hook.py\"",
             "timeout": 3
           }
         ]

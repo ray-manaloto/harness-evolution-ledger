@@ -31,18 +31,10 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "push", ["--force", "--force-with-lease", "-f"]],
-    decision = "forbidden",
-    justification = "Force-push is not an authorized delivery path.",
-    match = ["git push --force", "git push -f origin topic"],
-    not_match = ["git push origin topic", "git fetch --all"],
-)
-
-prefix_rule(
     pattern = ["git", "push"],
-    decision = "prompt",
-    justification = "All publication requires an explicit review of the exact remote and refspec.",
-    match = ["git push origin topic", "git push origin HEAD:main"],
+    decision = "forbidden",
+    justification = "Raw publication is not authorized; use reviewed repository ship and land tasks.",
+    match = ["git push --force", "git push -f origin topic", "git push origin topic", "git push origin topic --force-with-lease", "git push origin HEAD:main"],
     not_match = ["git fetch origin", "git status --short"],
 )
 

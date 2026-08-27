@@ -2,10 +2,16 @@ name: phase0
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened]
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      exercise_failure_control:
+        description: Run only on a dedicated control ref; this job must fail.
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -27,6 +33,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: ${{ env.TESTED_SHA }}
+          persist-credentials: false
 
       - name: Install locked mise tools
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4
@@ -54,7 +61,7 @@ jobs:
         run: mise run sbom
 
       - name: Exercise blocking failure control
-        if: contains(github.event.pull_request.labels.*.name, 'phase0-failure-control')
+        if: github.event_name == 'workflow_dispatch' && inputs.exercise_failure_control
         run: mise run control:fail
 
       - name: Upload SBOM

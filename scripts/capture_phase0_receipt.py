@@ -23,6 +23,29 @@ CONTROLS = (
 )
 
 
+def candidate_tree_digest() -> str:
+    result = subprocess.run(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    excluded = OUTPUT.relative_to(ROOT).as_posix()
+    paths = sorted(item.decode("utf-8") for item in result.stdout.split(b"\0") if item)
+    digest = hashlib.sha256()
+    for relative in paths:
+        if relative == excluded:
+            continue
+        path = ROOT / relative
+        digest.update(relative.encode("utf-8") + b"\0")
+        if not path.is_file():
+            digest.update(b"missing\0")
+            continue
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def captured(argv: list[str], expected: int) -> dict[str, object]:
     started = datetime.now(timezone.utc)
     result = subprocess.run(
@@ -50,26 +73,12 @@ def main() -> int:
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True, text=True, stdout=subprocess.PIPE
     ).stdout.strip()
-    diff = subprocess.run(
-        [
-            "git",
-            "diff",
-            "--binary",
-            "HEAD",
-            "--",
-            ".",
-            ":(exclude)docs/receipts/phase-0/host-controls.json",
-        ],
-        cwd=ROOT,
-        check=True,
-        stdout=subprocess.PIPE,
-    ).stdout
     controls = [captured(argv, expected) for argv, expected in CONTROLS]
     payload = {
         "schema": 1,
         "captured_at": datetime.now(timezone.utc).isoformat(),
         "head_before_commit": head,
-        "candidate_diff_sha256_excluding_this_receipt": hashlib.sha256(diff).hexdigest(),
+        "candidate_tree_sha256_excluding_this_receipt": candidate_tree_digest(),
         "credential_values_retained": False,
         "controls": controls,
     }

@@ -4,15 +4,35 @@ Product slice 1 remains closed while any row is blocked or pending.
 
 | # | Acceptance item | Status | Evidence or blocker |
 | --- | --- | --- | --- |
-| 1 | Correct clean local Codex project | **Blocked** | Git checkout/branch are correct, but Codex Desktop has no saved project bound to this folder |
-| 2 | Required capability inventory and controls | **Blocked** | Complete sanitized 60-plugin inventory plus required manifest prepared; Exa OAuth and Last30Days TLS positive controls remain unresolved |
-| 3 | Root instructions load without truncation | Proven in CLI; Desktop blocked | Fresh root and nested CLI sessions reported the complete 33-line root instruction chain; saved-project control remains blocked |
-| 4 | Trusted project Codex settings only | Static proven; runtime blocked | Strict fresh CLI start and positive/negative TOML controls pass; repository hook runtime load remains unproven without a saved trusted project |
+| 1 | Correct clean local Codex project | Binding proven; clean-clone pending | Codex Desktop lists saved project `harness-evolution-ledger` at the canonical repository path; completion work is isolated on `codex/phase-0-bootstrap-completion` from exact SHA `703168b3bc413f075bea8c0d712abd16e6d3817d` |
+| 2 | Required capability inventory and controls | **Blocked on Exa** | Sanitized plugin inventory is complete. Last30Days v3.21.1 preflight was safe/read-only and its bounded positive query exited 0 with byte-exact ignored evidence plus a tracked projection. Exa is installed/enabled but exposes no callable tool in this task, so no positive control exists |
+| 3 | Root instructions load without truncation | Proven in CLI and current task | Fresh root and nested CLI sessions reported the complete 33-line root instruction chain; the current Codex worktree task also received the root `AGENTS.md` instruction context |
+| 4 | Trusted project Codex settings only | Static proven; runtime blocked | Strict fresh CLI start and positive/negative TOML controls pass; a saved project now exists, but a fresh trusted canonical-project session has not produced the repository hook's `.git/hel/hooks.jsonl` runtime record |
 | 5 | Codex and Git hooks both directions | Proven locally | `mise run hooks:verify` exercised lifecycle allow/deny/redaction/malformed/queue controls and both hk hook directions |
-| 6 | Command rules controls | Proven locally | `mise run rules:verify` discriminated 17 controls; cleanup inventory is allowed while apply paths are forbidden or prompted |
-| 7 | Clean host clone and immutable devcontainer | Container proven; clone pending | Immutable multi-arch index, fresh automated post-create, verified locked install, and semantic P2996 reflection gate pass; clean committed clone remains |
+| 6 | Command rules controls | Proven locally | `mise run rules:verify` discriminated 17 controls; all raw pushes are forbidden, including a force flag after the refspec, while cleanup inventory remains allowed |
+| 7 | Clean host clone and immutable devcontainer | Container proven; clone pending | Immutable multi-arch index, fresh automated post-create, verified locked install, and semantic P2996 reflection gate pass; the final committed candidate still needs an independent clean-clone rerun |
 | 8 | Scoped Keychain/Doppler/fnox route | **Blocked** | Poisoned child control passes, but `DOPPLER_TOKEN` is absent so live provider usability is unproven |
-| 9 | Shared CI and blocking failure control | Local proven; remote pending | Runs `32918067811` and `32918389481` exposed ambient-compiler and analyzer-prefix bugs; neither counts as the deliberate control. Green and labeled-failure runs remain |
-| 10 | Reviewed PR merged to remote `main` | Draft PR open | PR #4 is deliberately draft while blockers remain; independent review, exact-SHA green checks, failure control, receipt, and merge remain |
+| 9 | Shared CI and blocking failure control | Local proven; remote candidate pending | Exact PR head `703168b3bc413f075bea8c0d712abd16e6d3817d` has two successful `check` runs and one deliberate-control failure (`32918827009`). Because that failure shares the PR check context, PR #4 is genuinely unstable. The local workflow moves the failure control to explicit dispatch on a dedicated control ref; it needs authorized publication and exact-SHA remote proof |
+| 10 | Reviewed PR merged to remote `main` | **Blocked** | PR #4 remains draft with no approving review. Repowise fails because health fell 10.0 to 8.5 against a 0.3 budget, with four complexity warnings. The local candidate decomposes the flagged methods, but review, remote checks, delivery receipt, and merge remain |
 
 No `hel` slice-1 tracer files or behavior have been added.
+
+## Completion audit notes
+
+- Public host tasks observed during the 2026-08-27 completion pass: `setup`,
+  `doctor`, `check`, `hooks:verify`, and `rules:verify` exited 0. The first
+  `check` attempt exited 1 because the external Last30Days renderer's Markdown
+  was not repository-formatted; that output was removed as raw evidence, a
+  byte-exact ignored recapture was retained, and the normalized projection
+  passed the rerun.
+- `setup` installed the repository hk hooks into the shared canonical Git
+  directory. This is expected Git worktree behavior and did not modify the
+  canonical checkout's branch or tracked files.
+- `DOPPLER_TOKEN` remains absent. `doctor` proves fnox 1.34.0 and Doppler CLI
+  3.76.5 are installed, while the poisoned-child control proves common provider
+  keys are removed. It does not prove Keychain-to-fnox-to-Doppler usability.
+- The host CMake preset is not a public entry point. `mise run configure`, used
+  by the public build/check tasks, injects the exact locked Clang++ 22.1.8
+  binary; direct CMake invocation is forbidden by command policy. This accounts
+  for the review request to avoid ambient compiler selection without duplicating
+  a machine-specific path in `CMakePresets.json`.

@@ -1,0 +1,29 @@
+{
+  "intent": "concept",
+  "freshness_mode": "balanced_recent",
+  "cluster_mode": "topic",
+  "subqueries": [
+    {
+      "label": "primary",
+      "search_query": "C++26 P2996 reflection",
+      "ranking_query": "What concrete C++26 P2996 reflection implementations, examples, and limitations were discussed recently?",
+      "sources": [
+        "reddit",
+        "x",
+        "youtube",
+        "tiktok",
+        "instagram",
+        "hackernews",
+        "polymarket"
+      ],
+      "weight": 1.0
+    },
+    {
+      "label": "toolchains",
+      "search_query": "C++26 P2996 compiler implementation",
+      "ranking_query": "Which compiler implementations demonstrate semantic C++26 P2996 reflection support?",
+      "sources": ["reddit", "youtube", "hackernews"],
+      "weight": 0.8
+    }
+  ]
+}

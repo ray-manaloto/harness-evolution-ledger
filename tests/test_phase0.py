@@ -59,7 +59,7 @@ class Phase0PolicyTests(unittest.TestCase):
 
     def test_forged_delivery_receipt_does_not_unlock_gate(self) -> None:
         marker = ROOT / "docs/receipts/phase-0/merged.json"
-        self.assertFalse(marker.exists(), "test requires no genuine merged receipt")
+        original = marker.read_bytes() if marker.exists() else None
         marker.write_text(json.dumps({"pr": 1, "remote_sha": "forged", "review": {}, "checks": {}}))
         try:
             result = subprocess.run(
@@ -71,7 +71,10 @@ class Phase0PolicyTests(unittest.TestCase):
                 stderr=subprocess.PIPE,
             )
         finally:
-            marker.unlink(missing_ok=True)
+            if original is None:
+                marker.unlink(missing_ok=True)
+            else:
+                marker.write_bytes(original)
         self.assertEqual(2, result.returncode)
         self.assertIn("schema is invalid", result.stderr)
 

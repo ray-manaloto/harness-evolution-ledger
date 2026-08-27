@@ -3,6 +3,10 @@
 Observed 2026-08-25 on macOS arm64. Commands ran from the repository root unless
 an explicit container command is shown. No credential values were printed.
 
+Completion controls were rerun 2026-08-27 from the isolated Codex worktree on
+`codex/phase-0-bootstrap-completion`. The task began at exact commit
+`703168b3bc413f075bea8c0d712abd16e6d3817d`.
+
 ## Host gates
 
 | Command | Exit | Exact control result |
@@ -56,6 +60,20 @@ the host cache, and the opposing rerun passed without the warning.
 
 `DOPPLER_TOKEN`, `ANTHROPIC_API_KEY`, and `OPENAI_API_KEY` were absent. The
 poisoned child-process control removed common Anthropic and OpenAI key variables.
+
+The 2026-08-27 completion pass observed `mise run setup`, `doctor`, `check`,
+`hooks:verify`, and `rules:verify` exit 0 after remediation. Rules now forbid all
+raw pushes, including `git push origin topic --force-with-lease`. Hook controls
+add an opposite-direction `/dev/null` sink and deny a destructive Git command
+after a newline. Test-only behavior requires `HEL_HOOK_TEST_MODE=1`.
+
+The first completion `check` exited 1 because a newly generated Last30Days file
+was not valid repository Markdown. Formatting that file invalidated its raw-byte
+claim, so it was removed and superseded. The same bounded probe was recaptured
+under ignored `build/receipts/phase-0/last30days-completion/` with separate exact
+stdout, stderr, exit-status, and engine-report hashes. The tracked normalized
+projection is
+`docs/receipts/phase-0/last30days/c-26-static-reflection-positive-control.md`.
 
 ## Fresh Codex CLI controls
 
