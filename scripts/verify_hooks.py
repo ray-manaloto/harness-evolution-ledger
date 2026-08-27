@@ -48,13 +48,17 @@ def expect(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
-def codex_controls() -> None:
-    allowed = {
+def allowed_bash_event() -> dict[str, object]:
+    return {
         **base("PreToolUse"),
         "tool_name": "Bash",
         "tool_use_id": "allowed",
         "tool_input": {"command": "set -euo pipefail; git status --short"},
     }
+
+
+def pre_tool_controls() -> None:
+    allowed = allowed_bash_event()
     result = invoke(allowed, HEL_HOOK_TEST_BRANCH="codex/phase-0-bootstrap")
     expect(result.returncode == 0 and result.stdout == "", f"allow control failed: {result.stderr}")
 
@@ -128,6 +132,8 @@ def codex_controls() -> None:
     payload = json.loads(result.stdout)
     expect(payload["hookSpecificOutput"]["permissionDecision"] == "deny", "remote main push allowed")
 
+
+def malformed_input_control() -> None:
     malformed = subprocess.run(
         [sys.executable, str(HOOK)],
         cwd=ROOT,
@@ -139,6 +145,8 @@ def codex_controls() -> None:
     )
     expect(malformed.returncode == 2, "non-object hook input did not fail closed")
 
+
+def post_tool_redaction_control() -> None:
     with tempfile.TemporaryDirectory() as temp_dir:
         log = Path(temp_dir) / "hooks.jsonl"
         unknown_secret = "phase0-unknown-credential-value"
@@ -163,6 +171,8 @@ def codex_controls() -> None:
         expect(unknown_secret not in contents, "unknown credential value reached hook log")
         expect("[REDACTED]" in contents, "redaction marker missing from hook log")
 
+
+def session_lifecycle_controls() -> None:
     result = invoke(
         {**base("SessionStart"), "source": "startup"},
         HEL_HOOK_TEST_BRANCH="codex/phase-0-bootstrap",
@@ -193,6 +203,13 @@ def codex_controls() -> None:
         queued = json.loads((Path(temp_dir) / "queue.jsonl").read_text(encoding="utf-8"))
         expect(queued["status"] == "pending", "SessionEnd queue item is not pending")
         expect(queued["kind"] == "phase0-session-end", "SessionEnd queue kind drifted")
+
+
+def codex_controls() -> None:
+    pre_tool_controls()
+    malformed_input_control()
+    post_tool_redaction_control()
+    session_lifecycle_controls()
 
 
 def hk_controls() -> None:

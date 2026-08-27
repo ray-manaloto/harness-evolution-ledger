@@ -552,11 +552,7 @@ def delivery_gate(operation: str) -> int:
     return 0
 
 
-def main() -> int:
-    if len(sys.argv) < 2:
-        print("usage: phase0.py COMMAND", file=sys.stderr)
-        return 2
-    command = sys.argv[1]
+def dispatch_simple(command: str, argv: list[str]) -> int | None:
     simple_commands = {
         "doctor": doctor,
         "format": lambda: format_files(False),
@@ -567,8 +563,12 @@ def main() -> int:
         "consistency": consistency,
         "changed": changed,
     }
-    if command in simple_commands and len(sys.argv) == 2:
+    if command in simple_commands and len(argv) == 2:
         return simple_commands[command]()
+    return None
+
+
+def dispatch_build(command: str) -> int | None:
     if command == "configure":
         argv = ["cmake", "--preset", cmake_preset()]
         if os.environ.get("DEVCONTAINER") != "true":
@@ -581,16 +581,35 @@ def main() -> int:
     if command == "ctest":
         run(["ctest", "--preset", cmake_preset()])
         return 0
+    return None
+
+
+def dispatch_policy(command: str, argv: list[str]) -> int | None:
     if command == "config-policy":
-        path = Path(sys.argv[2]) if len(sys.argv) == 3 else None
+        path = Path(argv[2]) if len(argv) == 3 else None
         return config_policy(path)
     if command == "deliberate-failure":
         print("intentional phase-0 delivery failure control", file=sys.stderr)
         return 42
-    if command == "ship" and len(sys.argv) == 2:
+    if command == "ship" and len(argv) == 2:
         return ship_candidate()
-    if command == "delivery-gate" and len(sys.argv) == 3:
-        return delivery_gate(sys.argv[2])
+    if command == "delivery-gate" and len(argv) == 3:
+        return delivery_gate(argv[2])
+    return None
+
+
+def main() -> int:
+    if len(sys.argv) < 2:
+        print("usage: phase0.py COMMAND", file=sys.stderr)
+        return 2
+    command = sys.argv[1]
+    for dispatcher in (dispatch_simple, dispatch_policy):
+        result = dispatcher(command, sys.argv)
+        if result is not None:
+            return result
+    result = dispatch_build(command)
+    if result is not None:
+        return result
     print(f"unknown command: {command}", file=sys.stderr)
     return 2
 
