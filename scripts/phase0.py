@@ -452,38 +452,40 @@ def ship_candidate() -> int:
     return 0
 
 
+def valid_review_receipt(review: object, prototype_bypass_review: bool) -> bool:
+    if not isinstance(review, dict):
+        return False
+    if prototype_bypass_review:
+        return review == {
+            "decision": "PROTOTYPE_BYPASS",
+            "authorization": "--prototype-bypass-review",
+        }
+    reviewer = review.get("reviewer")
+    return (
+        review.get("decision") == "APPROVED"
+        and isinstance(reviewer, str)
+        and bool(reviewer)
+    )
+
+
 def valid_receipt_values(
     data: dict[str, object], prototype_bypass_review: bool = False
 ) -> bool:
-    if set(data) != RECEIPT_KEYS or data.get("schema") != 1:
-        return False
     pr = data.get("pr")
     remote_sha = data.get("remote_sha")
     review = data.get("review")
     checks = data.get("checks")
-    if not isinstance(pr, int) or not isinstance(remote_sha, str):
-        return False
-    if len(remote_sha) != 40 or any(character not in "0123456789abcdef" for character in remote_sha):
-        return False
-    if not isinstance(review, dict):
-        return False
-    if prototype_bypass_review:
-        if review != {
-            "decision": "PROTOTYPE_BYPASS",
-            "authorization": "--prototype-bypass-review",
-        }:
-            return False
-    elif review.get("decision") != "APPROVED":
-        return False
-    if prototype_bypass_review:
-        return isinstance(checks, dict) and bool(checks) and all(
-            value == "SUCCESS" for value in checks.values()
-        )
-    reviewer = review.get("reviewer")
-    if not isinstance(reviewer, str) or not reviewer:
-        return False
-    return isinstance(checks, dict) and bool(checks) and all(
-        value == "SUCCESS" for value in checks.values()
+    return (
+        set(data) == RECEIPT_KEYS
+        and data.get("schema") == 1
+        and isinstance(pr, int)
+        and isinstance(remote_sha, str)
+        and len(remote_sha) == 40
+        and all(character in "0123456789abcdef" for character in remote_sha)
+        and valid_review_receipt(review, prototype_bypass_review)
+        and isinstance(checks, dict)
+        and bool(checks)
+        and all(value == "SUCCESS" for value in checks.values())
     )
 
 
