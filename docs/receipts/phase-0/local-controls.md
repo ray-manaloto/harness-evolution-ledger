@@ -79,7 +79,10 @@ An independent clone of commit `3454d71999503ee5c511f954cb574846bc354266`
 passed `setup`, `doctor`, `check`, `hooks:verify`, `rules:verify`, and `security`.
 Its `sbom` task exited 0 but emitted permission warnings outside the clone because
 `syft dir:.` resolved through macOS's `/var` path alias. That result was rejected;
-the task now supplies Git's explicit repository root and requires a fresh rerun.
+the task now supplies Git's explicit repository root. A new clean clone of
+`36f6794ee13cbeac10e435c37a5419919d46d442` then passed `setup`, `doctor`,
+`check`, `hooks:verify`, `rules:verify`, `security`, and `sbom`; the corrected
+SBOM emitted no permission warnings. Its final tracked status was clean.
 
 ## Fresh Codex CLI controls
 
