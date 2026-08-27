@@ -26,7 +26,7 @@ secret file or broad environment is mounted into the container.
 
 The image contains mise 2026.8.5 and disables GitHub-attestation and SLSA
 verification in its system config. The project post-create handler installs a
-user-local mise 2026.8.13, while `mise.toml` explicitly re-enables both provenance
+user-local mise 2026.8.14, while `mise.toml` explicitly re-enables both provenance
 controls before the locked install. The image's non-root user is `ubuntu`; it has no
 `devcontainer` account.
 

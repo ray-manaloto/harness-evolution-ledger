@@ -32,7 +32,7 @@ No `hel` slice-1 tracer files or behavior have been added.
   3.76.5 are installed, while the poisoned-child control proves common provider
   keys are removed. It does not prove Keychain-to-fnox-to-Doppler usability.
 - The host CMake preset is not a public entry point. `mise run configure`, used
-  by the public build/check tasks, injects the exact locked Clang++ 22.1.8
+  by the public build/check tasks, injects the exact locked Clang++ 23.1.0
   binary; direct CMake invocation is forbidden by command policy. This accounts
   for the review request to avoid ambient compiler selection without duplicating
   a machine-specific path in `CMakePresets.json`.

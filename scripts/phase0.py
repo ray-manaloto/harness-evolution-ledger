@@ -17,6 +17,8 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+HOST_LLVM_VERSION = "23.1.0"
+HOST_LLVM_RESOURCE_VERSION = HOST_LLVM_VERSION.partition(".")[0]
 MACHINE_OWNED_CODEX_KEYS = {
     "model",
     "model_provider",
@@ -121,7 +123,7 @@ def mise_prefix(tool: str, version_text: str) -> Path:
 
 
 def host_compiler() -> Path:
-    return mise_prefix("conda:clangxx", "22.1.8") / "bin/clang++"
+    return mise_prefix("conda:clangxx", HOST_LLVM_VERSION) / "bin/clang++"
 
 
 def doctor() -> int:
@@ -211,9 +213,10 @@ def lint() -> int:
         tidy = Path("/usr/lib/llvm-22/bin/clang-tidy")
         extra: list[str] = []
     else:
-        compiler_prefix = mise_prefix("conda:clangxx", "22.1.8")
-        tidy = mise_prefix("conda:clang-tools", "22.1.8") / "bin/clang-tidy"
-        extra = [f"--extra-arg=-resource-dir={compiler_prefix / 'lib/clang/22'}"]
+        compiler_prefix = mise_prefix("conda:clangxx", HOST_LLVM_VERSION)
+        tidy = mise_prefix("conda:clang-tools", HOST_LLVM_VERSION) / "bin/clang-tidy"
+        resource_dir = compiler_prefix / "lib/clang" / HOST_LLVM_RESOURCE_VERSION
+        extra = [f"--extra-arg=-resource-dir={resource_dir}"]
     run([str(tidy), *extra, "-p", f"build/{cmake_preset()}", "tests/phase0_smoke.cpp"])
     return 0
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly mise_version="2026.8.13"
+readonly mise_version="2026.8.14"
 readonly user_mise_dir="${HOME}/.local/bin"
 
 mkdir -p "${user_mise_dir}"
