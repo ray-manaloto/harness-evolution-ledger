@@ -660,12 +660,15 @@ def live_checks_match(live: dict[str, object], declared: dict[str, object]) -> b
     return all(observed.get(name) == expected for name, expected in declared.items())
 
 
-def github_json(argv: list[str], repository: Path = ROOT) -> dict[str, object]:
+def github_json(
+    argv: list[str], repository: Path = ROOT, input_data: str | None = None
+) -> dict[str, object]:
     result = subprocess.run(
         ["gh", *argv],
         cwd=repository,
         check=False,
         text=True,
+        input=input_data,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -677,27 +680,71 @@ def github_json(argv: list[str], repository: Path = ROOT) -> dict[str, object]:
     return data
 
 
-def update_required_review_count(count: int) -> int:
-    endpoint = (
-        f"repos/{GITHUB_REPOSITORY}/branches/main/protection/"
-        "required_pull_request_reviews"
-    )
-    data = github_json(
+def enabled(protection: dict[str, object], key: str) -> bool:
+    value = protection.get(key)
+    return isinstance(value, dict) and value.get("enabled") is True
+
+
+def protection_payload(
+    protection: dict[str, object], *, prototype_bypass: bool
+) -> dict[str, object]:
+    status_checks = protection.get("required_status_checks")
+    reviews = protection.get("required_pull_request_reviews")
+    if not isinstance(status_checks, dict) or not isinstance(reviews, dict):
+        raise RuntimeError("GitHub branch protection schema is incomplete")
+    checks = status_checks.get("checks")
+    if not isinstance(checks, list) or not checks:
+        raise RuntimeError("GitHub required checks are unavailable")
+    review_payload: dict[str, object] = {
+        "dismiss_stale_reviews": reviews.get("dismiss_stale_reviews") is True,
+        "require_code_owner_reviews": reviews.get("require_code_owner_reviews") is True,
+        "required_approving_review_count": (
+            0 if prototype_bypass else reviews.get("required_approving_review_count")
+        ),
+        "require_last_push_approval": (
+            False if prototype_bypass else reviews.get("require_last_push_approval") is True
+        ),
+    }
+    bypass_allowances = reviews.get("bypass_pull_request_allowances")
+    if isinstance(bypass_allowances, dict):
+        review_payload["bypass_pull_request_allowances"] = bypass_allowances
+    return {
+        "required_status_checks": {
+            "strict": status_checks.get("strict") is True,
+            "checks": checks,
+        },
+        "enforce_admins": enabled(protection, "enforce_admins"),
+        "required_pull_request_reviews": review_payload,
+        "restrictions": protection.get("restrictions"),
+        "required_linear_history": enabled(protection, "required_linear_history"),
+        "allow_force_pushes": enabled(protection, "allow_force_pushes"),
+        "allow_deletions": enabled(protection, "allow_deletions"),
+        "block_creations": enabled(protection, "block_creations"),
+        "required_conversation_resolution": (
+            False
+            if prototype_bypass
+            else enabled(protection, "required_conversation_resolution")
+        ),
+        "lock_branch": enabled(protection, "lock_branch"),
+        "allow_fork_syncing": enabled(protection, "allow_fork_syncing"),
+    }
+
+
+def update_branch_protection(
+    protection: dict[str, object], *, prototype_bypass: bool
+) -> dict[str, object]:
+    payload = protection_payload(protection, prototype_bypass=prototype_bypass)
+    return github_json(
         [
             "api",
             "--method",
-            "PATCH",
-            endpoint,
-            "-F",
-            f"required_approving_review_count={count}",
-        ]
+            "PUT",
+            f"repos/{GITHUB_REPOSITORY}/branches/main/protection",
+            "--input",
+            "-",
+        ],
+        input_data=json.dumps(payload),
     )
-    observed = data.get("required_approving_review_count")
-    if observed != count:
-        raise RuntimeError(
-            f"GitHub review requirement mismatch: expected {count}, observed {observed}"
-        )
-    return count
 
 
 def live_pr_for_landing() -> dict[str, object]:
@@ -762,19 +809,12 @@ def land_prototype_candidate() -> int:
         return 2
 
     protection = github_json(
-        [
-            "api",
-            f"repos/{GITHUB_REPOSITORY}/branches/main/protection/required_pull_request_reviews",
-        ]
+        ["api", f"repos/{GITHUB_REPOSITORY}/branches/main/protection"]
     )
-    original_count = protection.get("required_approving_review_count")
-    if not isinstance(original_count, int):
-        print("land blocked: review protection is unavailable", file=sys.stderr)
-        return 2
 
     merge: dict[str, object] | None = None
     try:
-        update_required_review_count(0)
+        update_branch_protection(protection, prototype_bypass=True)
         merge = github_json(
             [
                 "api",
@@ -788,7 +828,7 @@ def land_prototype_candidate() -> int:
             ]
         )
     finally:
-        update_required_review_count(original_count)
+        update_branch_protection(protection, prototype_bypass=False)
 
     merge_sha = merge.get("sha") if isinstance(merge, dict) else None
     if merge is None or merge.get("merged") is not True or not isinstance(merge_sha, str):

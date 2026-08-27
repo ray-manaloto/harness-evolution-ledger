@@ -339,6 +339,37 @@ class Phase0PolicyTests(unittest.TestCase):
         self.assertTrue(phase0.live_checks_match(live, {"check": "SUCCESS"}))
         self.assertFalse(phase0.live_checks_match(live, {"missing": "SUCCESS"}))
 
+    def test_prototype_protection_payload_preserves_unrelated_guards(self) -> None:
+        protection = {
+            "required_status_checks": {
+                "strict": True,
+                "checks": [{"context": "check", "app_id": 15368}],
+            },
+            "required_pull_request_reviews": {
+                "dismiss_stale_reviews": True,
+                "require_code_owner_reviews": False,
+                "require_last_push_approval": True,
+                "required_approving_review_count": 1,
+            },
+            "enforce_admins": {"enabled": True},
+            "required_linear_history": {"enabled": True},
+            "allow_force_pushes": {"enabled": False},
+            "allow_deletions": {"enabled": False},
+            "block_creations": {"enabled": False},
+            "required_conversation_resolution": {"enabled": True},
+            "lock_branch": {"enabled": False},
+            "allow_fork_syncing": {"enabled": False},
+        }
+        bypass = phase0.protection_payload(protection, prototype_bypass=True)
+        restored = phase0.protection_payload(protection, prototype_bypass=False)
+        self.assertEqual(0, bypass["required_pull_request_reviews"]["required_approving_review_count"])
+        self.assertFalse(bypass["required_pull_request_reviews"]["require_last_push_approval"])
+        self.assertFalse(bypass["required_conversation_resolution"])
+        self.assertEqual(1, restored["required_pull_request_reviews"]["required_approving_review_count"])
+        self.assertTrue(restored["required_pull_request_reviews"]["require_last_push_approval"])
+        self.assertTrue(restored["required_conversation_resolution"])
+        self.assertTrue(restored["enforce_admins"])
+
 
 if __name__ == "__main__":
     unittest.main()
