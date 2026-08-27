@@ -14,6 +14,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,6 +57,41 @@ REQUIRED_PLUGINS = (
     "openai-developers@openai-curated",
 )
 RECEIPT_KEYS = {"schema", "pr", "remote_sha", "review", "checks"}
+REQUIRED_COMMANDS = (
+    "actionlint",
+    "bash",
+    "clang++",
+    "clang-format",
+    "clang-tidy",
+    "cmake",
+    "cmake-format",
+    "codex",
+    "cosign",
+    "cp",
+    "ctest",
+    "devcontainer",
+    "doppler",
+    "fnox",
+    "gh",
+    "git",
+    "gitleaks",
+    "hk",
+    "mkdir",
+    "ninja",
+    "node",
+    "pkl",
+    "python3",
+    "rumdl",
+    "shellcheck",
+    "shfmt",
+    "syft",
+    "taplo",
+)
+EXPLICIT_COMMANDS = {
+    "clang++": ("conda:clangxx", HOST_LLVM_VERSION, "bin/clang++"),
+    "clang-format": ("conda:clang-tools", HOST_LLVM_VERSION, "bin/clang-format"),
+    "clang-tidy": ("conda:clang-tools", HOST_LLVM_VERSION, "bin/clang-tidy"),
+}
 
 
 def run(argv: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -71,6 +107,20 @@ def capture(argv: list[str]) -> tuple[int, str]:
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+    )
+    return result.returncode, result.stdout.strip()
+
+
+def capture_stdout(
+    argv: list[str], *, env: dict[str, str] | None = None
+) -> tuple[int, str]:
+    result = subprocess.run(
+        argv,
+        cwd=ROOT,
+        check=False,
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
     )
     return result.returncode, result.stdout.strip()
 
@@ -116,7 +166,7 @@ def cmake_preset() -> str:
 
 
 def mise_prefix(tool: str, version_text: str) -> Path:
-    rc, output = capture(["mise", "where", f"{tool}@{version_text}"])
+    rc, output = capture_stdout(["mise", "where", f"{tool}@{version_text}"])
     if rc or not output:
         raise RuntimeError(f"locked mise prefix unavailable: {tool}@{version_text}")
     return Path(output)
@@ -124,6 +174,10 @@ def mise_prefix(tool: str, version_text: str) -> Path:
 
 def host_compiler() -> Path:
     return mise_prefix("conda:clangxx", HOST_LLVM_VERSION) / "bin/clang++"
+
+
+def host_clang_tool(binary: str) -> Path:
+    return mise_prefix("conda:clang-tools", HOST_LLVM_VERSION) / "bin" / binary
 
 
 def doctor() -> int:
@@ -135,16 +189,22 @@ def doctor() -> int:
     print(f"git_head={head} rc={rc}")
     for binary, args in (
         ("mise", ("--version",)),
+        ("bash", ("--version",)),
+        ("git", ("--version",)),
+        ("gh", ("--version",)),
         ("cmake", ("--version",)),
         ("ninja", ("--version",)),
-        ("clang++", ("--version",)),
-        ("clang-tidy", ("--version",)),
         ("hk", ("--version",)),
         ("fnox", ("--version",)),
         ("doppler", ("--version",)),
         ("codex", ("--version",)),
     ):
         print(f"tool.{binary}={version(binary, *args)}")
+    for binary in ("clang++", "clang-format", "clang-tidy"):
+        path = host_compiler() if binary == "clang++" else host_clang_tool(binary)
+        rc, output = capture([str(path), "--version"])
+        first = output.splitlines()[0] if output else "no version output"
+        print(f"tool.{binary}=rc={rc} {first} path={path}")
     if os.environ.get("DEVCONTAINER") != "true":
         print(f"compiler.host.selected={host_compiler()}")
     for name in (
@@ -166,6 +226,60 @@ def doctor() -> int:
     return 0
 
 
+def dependency_policy() -> int:
+    config_path = ROOT / "mise.toml"
+    declared = set(tomllib.loads(config_path.read_text(encoding="utf-8"))["tools"])
+    isolated_env = {
+        **os.environ,
+        "MISE_CONFIG_DIR": str(ROOT / "tests/fixtures/empty-mise-config"),
+    }
+    rc, output = capture_stdout(
+        ["mise", "ls", "--current", "--json"], env=isolated_env
+    )
+    if rc:
+        print("unable to inspect active mise tools", file=sys.stderr)
+        return 2
+    active = json.loads(output)
+    failures: list[str] = []
+    for tool in sorted(declared):
+        entries = active.get(tool)
+        local = [
+            item
+            for item in entries or []
+            if item.get("active")
+            and item.get("source", {}).get("path") == str(config_path)
+        ]
+        if not local:
+            failures.append(f"tool is not active from repository mise.toml: {tool}")
+    install_root = Path(os.environ.get("MISE_INSTALLS_DIR", Path.home() / ".local/share/mise/installs"))
+    for command in REQUIRED_COMMANDS:
+        explicit = EXPLICIT_COMMANDS.get(command)
+        if explicit:
+            tool, version_text, relative_path = explicit
+            path = (mise_prefix(tool, version_text) / relative_path).resolve()
+            if not path.is_file():
+                failures.append(f"command is absent from its declared mise tool: {command} -> {path}")
+                continue
+        else:
+            rc, resolved = capture_stdout(
+                ["mise", "which", command], env=isolated_env
+            )
+            if rc or not resolved:
+                failures.append(f"command is not provided by a mise tool: {command}")
+                continue
+            path = Path(resolved).resolve()
+        if not path.is_relative_to(install_root.resolve()):
+            failures.append(f"command resolved outside mise installs: {command} -> {path}")
+    if failures:
+        print("\n".join(failures), file=sys.stderr)
+        return 2
+    print(
+        f"{len(declared)} tools and {len(REQUIRED_COMMANDS)} commands resolve from "
+        "repository mise with the user config excluded"
+    )
+    return 0
+
+
 def tracked_files(suffixes: tuple[str, ...], names: tuple[str, ...] = ()) -> list[str]:
     rc, output = capture(["git", "ls-files", "--cached", "--others", "--exclude-standard"])
     if rc != 0:
@@ -182,7 +296,8 @@ def format_files(check_only: bool) -> int:
     cmake = tracked_files((".cmake",), ("CMakeLists.txt",))
     shell = tracked_files((".sh",))
     if cpp:
-        args = ["clang-format", "--dry-run", "--Werror"] if check_only else ["clang-format", "-i"]
+        formatter = str(host_clang_tool("clang-format"))
+        args = [formatter, "--dry-run", "--Werror"] if check_only else [formatter, "-i"]
         run([*args, *cpp])
     if cmake:
         args = ["cmake-format", "--check"] if check_only else ["cmake-format", "-i"]
@@ -214,7 +329,7 @@ def lint() -> int:
         extra: list[str] = []
     else:
         compiler_prefix = mise_prefix("conda:clangxx", HOST_LLVM_VERSION)
-        tidy = mise_prefix("conda:clang-tools", HOST_LLVM_VERSION) / "bin/clang-tidy"
+        tidy = host_clang_tool("clang-tidy")
         resource_dir = compiler_prefix / "lib/clang" / HOST_LLVM_RESOURCE_VERSION
         extra = [f"--extra-arg=-resource-dir={resource_dir}"]
     run([str(tidy), *extra, "-p", f"build/{cmake_preset()}", "tests/phase0_smoke.cpp"])
@@ -222,8 +337,6 @@ def lint() -> int:
 
 
 def config_policy(path: Path | None = None) -> int:
-    import tomllib
-
     config_path = path or ROOT / ".codex/config.toml"
     data = tomllib.loads(config_path.read_text(encoding="utf-8"))
     rejected = sorted(MACHINE_OWNED_CODEX_KEYS.intersection(data))
@@ -404,6 +517,7 @@ def main() -> int:
         "format-check": lambda: format_files(True),
         "lint": lint,
         "secrets-control": secrets_control,
+        "dependency-policy": dependency_policy,
         "consistency": consistency,
         "changed": changed,
     }

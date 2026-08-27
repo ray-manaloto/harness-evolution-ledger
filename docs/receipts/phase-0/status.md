@@ -36,6 +36,15 @@ No `hel` slice-1 tracer files or behavior have been added.
   binary; direct CMake invocation is forbidden by command policy. This accounts
   for the review request to avoid ambient compiler selection without duplicating
   a machine-specific path in `CMakePresets.json`.
+- Every portable executable used by public tasks is pinned in the repository
+  `mise.toml`; transitive Conda package URLs and checksums are retained in
+  `mise.lock`. The mise bootstrap itself is enforced at 2026.8.14 by
+  `min_version`, CI, and the devcontainer because mise must start before it can
+  load project tools. `mise run dependencies:verify` loads a tracked empty
+  `MISE_CONFIG_DIR` and proves 25 tools plus 28 commands resolve from the
+  repository. Git, GitHub CLI, Bash, coreutils, and LLVM are therefore not
+  inherited from user configuration, Homebrew, or the macOS system. Under that
+  isolated config, `mise outdated -b --local -J` exited 0 with `{}`.
 - The first independent clone run made `syft dir:.` resolve too broadly through
   macOS's `/var` to `/private/var` path alias. It exited 0 with permission
   warnings, so that SBOM was rejected as proof. The task now passes Syft Git's

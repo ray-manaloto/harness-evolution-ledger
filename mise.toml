@@ -1,12 +1,23 @@
-min_version = "2026.8.5"
+min_version = "2026.8.14"
 
 [settings]
 github_attestations = true
 lockfile = true
+lockfile_platforms = [
+  "linux-arm64",
+  "linux-arm64-musl",
+  "linux-x64",
+  "linux-x64-musl",
+  "macos-arm64",
+  "macos-x64",
+]
 minimum_release_age = "7d"
 slsa = true
 task.output = "keep-order"
 task.timings = true
+
+[tool_config]
+locked = true
 
 [tools]
 actionlint = "1.7.12"
@@ -14,15 +25,20 @@ cmake = "4.4.3"
 cosign = "3.1.3"
 devcontainer-cli = "0.88.0"
 fnox = "1.34.0"
+github-cli = "2.98.0"
 gitleaks = "8.30.1"
 hk = "1.56.1"
 "github:DopplerHQ/cli" = "3.76.5"
 "pipx:cmakelang" = { version = "0.6.13", depends = ["python"] }
 "conda:clang-tools" = "23.1.0"
 "conda:clangxx" = "23.1.0"
+"conda:bash" = "5.2.37"
+"conda:coreutils" = "9.11"
+"conda:git" = "2.55.0"
 ninja = "1.13.2"
 node = "26.7.0"
-"npm:@openai/codex" = "0.150.0"
+codex = "0.150.0"
+pkl = "0.32.1"
 python = "3.14.7"
 rumdl = "0.2.60"
 shellcheck = "0.11.0"
@@ -98,7 +114,14 @@ run = "python3 scripts/phase0.py lint"
 
 [tasks.check]
 description = "Run the complete local phase-0 gate"
-depends = ["fmt:check", "lint", "test", "config:verify", "secrets:verify"]
+depends = [
+  "fmt:check",
+  "lint",
+  "test",
+  "config:verify",
+  "dependencies:verify",
+  "secrets:verify",
+]
 run = "python3 scripts/phase0.py consistency"
 
 [tasks."check:changed"]
@@ -128,6 +151,10 @@ run = "python3 scripts/capture_phase0_receipt.py"
 [tasks."config:verify"]
 description = "Reject machine-owned keys from project Codex configuration"
 run = "python3 scripts/phase0.py config-policy"
+
+[tasks."dependencies:verify"]
+description = "Reject inherited or system-resolved project dependencies"
+run = "python3 scripts/phase0.py dependency-policy"
 
 [tasks."secrets:verify"]
 description = "Prove provider children receive an allowlisted, API-key-free environment"

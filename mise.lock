@@ -14,6 +14,18 @@ checksum = "sha256:548d128bc257badd2d9dbdff8173eb693fcbec84ceeb0fa74cbfed141ed42
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/binutils_impl_linux-aarch64-2.46.1-default_h5f4c503_102.conda"
 checksum = "sha256:eebe159bf600943552e4319ff4ce27b6a2dadf0dcc5443e76dcee9259a408e11"
 
+[conda-packages.linux-arm64."bzip2-1.0.8-h4777abc_10"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/bzip2-1.0.8-h4777abc_10.conda"
+checksum = "sha256:24eacc8a20fd7c4616566178562bef7f9344eb4a8700cfc3180fa75a6ff9d39f"
+
+[conda-packages.linux-arm64."c-ares-1.34.8-h29ee22c_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/c-ares-1.34.8-h29ee22c_2.conda"
+checksum = "sha256:3838d10a78c206a1a4ec7ff041880b4f9b8ecde3520c911daae9e06baeb8858e"
+
+[conda-packages.linux-arm64."ca-certificates-2026.7.22-hbd8a1cb_0"]
+url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
+checksum = "sha256:0a0544cf95f64394fe4959286f5c71f5444ad58feb0602e53becb27448d24da6"
+
 [conda-packages.linux-arm64."clang-23-23.1.0-default_h8a521cf_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/clang-23-23.1.0-default_h8a521cf_0.conda"
 checksum = "sha256:0e8d66ace0c53aa726a07ee271f6fb7766b4a1fef35a7ec33cd8b643bd612724"
@@ -58,9 +70,21 @@ checksum = "sha256:25ceb412b6e1750c37ccdca3a70303378e3ac6b665f9b9c6e1575a2af0c68
 url = "https://conda.anaconda.org/conda-forge/noarch/compiler-rt_linux-aarch64-23.1.0-h8af1aa0_0.conda"
 checksum = "sha256:5f34beae9415066ab3f9c22df8591836e72791f35a5eebc723b651994bd87fbd"
 
+[conda-packages.linux-arm64."icu-78.3-py311h3512406_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/icu-78.3-py311h3512406_2.conda"
+checksum = "sha256:54d921defd947adb58a90e10203d3bfe6c1f209f5f1a1ad2c6a9f7617f2fb59e"
+
 [conda-packages.linux-arm64."kernel-headers_linux-aarch64-4.18.0-h05a177a_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-aarch64-4.18.0-h05a177a_9.conda"
 checksum = "sha256:5d224bf4df9bac24e69de41897c53756108c5271a0e5d2d2f66fd4e2fbc1d84b"
+
+[conda-packages.linux-arm64."keyutils-1.6.3-h5bc82ec_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/keyutils-1.6.3-h5bc82ec_1.conda"
+checksum = "sha256:3999b1472f1e549a0b766428e2823abf20626aac5314b474c9b76bf6eb679def"
+
+[conda-packages.linux-arm64."krb5-1.22.2-h095d8e5_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/krb5-1.22.2-h095d8e5_2.conda"
+checksum = "sha256:601d79af94d9562ba70e2d4947034ba159aae293a3c860855335a7c76c14400e"
 
 [conda-packages.linux-arm64."ld_impl_linux-aarch64-2.46.1-default_h1979696_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/ld_impl_linux-aarch64-2.46.1-default_h1979696_102.conda"
@@ -78,6 +102,22 @@ checksum = "sha256:d83b434157fbf1e60d9fbe7aa3e1d42007c78a0f46ca9cb862216dc9224a7
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libcompiler-rt-23.1.0-hde6636f_0.conda"
 checksum = "sha256:a5a636e2110007d708f5b3615b60b59da15973e89cb3573f9869414ff2196086"
 
+[conda-packages.linux-arm64."libcurl-8.21.0-h86273da_5"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libcurl-8.21.0-h86273da_5.conda"
+checksum = "sha256:d7bc660680aee2ce4011779bdfc00b3f8d0c98acf503aa2982874d81b075ff66"
+
+[conda-packages.linux-arm64."libedit-3.1.20250104-pl5321hc48eb74_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libedit-3.1.20250104-pl5321hc48eb74_1.conda"
+checksum = "sha256:2d7218da06f1121619335bff25a2669df810dee90d2eb65b17f8b2e6b1c0d372"
+
+[conda-packages.linux-arm64."libev-4.33-h80f16a2_3"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libev-4.33-h80f16a2_3.conda"
+checksum = "sha256:4475f79a020e9ff2a5a0308c48cb2970a25d55c3dd724a97ab28bfac3be6cd49"
+
+[conda-packages.linux-arm64."libexpat-2.8.1-hfae3067_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libexpat-2.8.1-hfae3067_1.conda"
+checksum = "sha256:20a5726bc8705d91437c9e6ef83b30da64a1719b869656d20a1ee818333ea5ac"
+
 [conda-packages.linux-arm64."libgcc-16.2.0-h205dda4_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-16.2.0-h205dda4_4.conda"
 checksum = "sha256:a132d78d49d0fa0a08e9e2a77528a12d974e8e123bc32895c0bd0a737b8abd89"
@@ -85,6 +125,10 @@ checksum = "sha256:a132d78d49d0fa0a08e9e2a77528a12d974e8e123bc32895c0bd0a737b8ab
 [conda-packages.linux-arm64."libgcc-devel_linux-aarch64-16.2.0-hc0c2482_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libgcc-devel_linux-aarch64-16.2.0-hc0c2482_104.conda"
 checksum = "sha256:6f42cbeb9ed792a535084cee82ada8cdd6a208eed199da1f7e248cae020bfa1e"
+
+[conda-packages.linux-arm64."libgcc-ng-16.2.0-he9431aa_4"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-ng-16.2.0-he9431aa_4.conda"
+checksum = "sha256:e8643044040dd8aa88aee26c19e6b78bbbe0ce8a4d04b1c77ee53c71a1efd814"
 
 [conda-packages.linux-arm64."libgomp-16.2.0-h8acb6b2_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-16.2.0-h8acb6b2_4.conda"
@@ -102,6 +146,18 @@ checksum = "sha256:0565cf53224b6fde27f6ad63d0386f123ad9f4bce8b72ce3fa37bee597163
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_1.conda"
 checksum = "sha256:f760669fd1cea27f689f411c0d5488e26ce50e382c9b63e4ad348f959850124a"
 
+[conda-packages.linux-arm64."libnghttp2-1.68.1-ha4b982d_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-ha4b982d_1.conda"
+checksum = "sha256:0c28d734512fa2c66a232b2f3968eae7124dbd6ad42c594c752f1d08dfb86195"
+
+[conda-packages.linux-arm64."libpsl-0.23.1-hb8431ed_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libpsl-0.23.1-hb8431ed_1.conda"
+checksum = "sha256:757f79c182ac3080cf416acd91c7643b8074b8b2e5c1eba0ffc5a16897feb84b"
+
+[conda-packages.linux-arm64."libssh2-1.11.1-h7572e3e_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libssh2-1.11.1-h7572e3e_1.conda"
+checksum = "sha256:f6fef76c1c8899d7976030871b8cd8016b0a306d2b8519834cd6491d6a42fb82"
+
 [conda-packages.linux-arm64."libstdcxx-16.2.0-hef695bb_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libstdcxx-16.2.0-hef695bb_4.conda"
 checksum = "sha256:84d2b667bce6549325243235952110b1849ff2dfd7091a1479108930b88057d5"
@@ -109,6 +165,10 @@ checksum = "sha256:84d2b667bce6549325243235952110b1849ff2dfd7091a1479108930b8805
 [conda-packages.linux-arm64."libstdcxx-devel_linux-aarch64-16.2.0-h082e5f6_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libstdcxx-devel_linux-aarch64-16.2.0-h082e5f6_104.conda"
 checksum = "sha256:d9c4a9b38184a8eca2c9744b28e153b7924299fc79bc039e032408c8c4a97cb9"
+
+[conda-packages.linux-arm64."libxcrypt-4.4.38-h80f16a2_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libxcrypt-4.4.38-h80f16a2_0.conda"
+checksum = "sha256:d3514900e2121972e435f7803763c1843dad6709e48aa02a2b47c4d481f83be7"
 
 [conda-packages.linux-arm64."libxml2-16-2.15.3-h064b767_1"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libxml2-16-2.15.3-h064b767_1.conda"
@@ -125,6 +185,26 @@ checksum = "sha256:76efa6cc9d7e6f5ee3bbca0939f64054af2bdfb3c3632531f8e633cf6c2ea
 [conda-packages.linux-arm64."llvm-openmp-23.1.0-hde6636f_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/llvm-openmp-23.1.0-hde6636f_0.conda"
 checksum = "sha256:379103e14959c4b81af30ba552b58d03a53bcd9bd49c4501daa7a7461520e28d"
+
+[conda-packages.linux-arm64."ncurses-6.6-h2b6f883_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/ncurses-6.6-h2b6f883_1.conda"
+checksum = "sha256:d69a04914139627f0a6bfd19412d6c7f1e37edc896af84a6011e07e8bc1e69fa"
+
+[conda-packages.linux-arm64."openssl-3.6.4-he6ad1d5_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/openssl-3.6.4-he6ad1d5_0.conda"
+checksum = "sha256:a70c05a9baba9b1ce17c7e8b9479029372069b3bf402dbf200bc03696c531bed"
+
+[conda-packages.linux-arm64."pcre2-10.47-he574923_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/pcre2-10.47-he574923_1.conda"
+checksum = "sha256:16e5bee11686028d60a495004f99a10c613ada44cc27e330bee18a1b67fb184c"
+
+[conda-packages.linux-arm64."perl-5.32.1-7_h31becfc_perl5"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/perl-5.32.1-7_h31becfc_perl5.conda"
+checksum = "sha256:d78296134263b5bf476cad838ded65451e7162db756f9997c5d06b08122572ed"
+
+[conda-packages.linux-arm64."readline-8.3-ha7194a6_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/readline-8.3-ha7194a6_1.conda"
+checksum = "sha256:80167dcf73a96b6d0c1bb2298d7b8b9bc21b27cc5bf56979f9c548b49a4d1722"
 
 [conda-packages.linux-arm64."sysroot_linux-aarch64-2.28-h585391f_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/sysroot_linux-aarch64-2.28-h585391f_9.conda"
@@ -149,6 +229,18 @@ checksum = "sha256:548d128bc257badd2d9dbdff8173eb693fcbec84ceeb0fa74cbfed141ed42
 [conda-packages.linux-arm64-musl."binutils_impl_linux-aarch64-2.46.1-default_h5f4c503_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/binutils_impl_linux-aarch64-2.46.1-default_h5f4c503_102.conda"
 checksum = "sha256:eebe159bf600943552e4319ff4ce27b6a2dadf0dcc5443e76dcee9259a408e11"
+
+[conda-packages.linux-arm64-musl."bzip2-1.0.8-h4777abc_10"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/bzip2-1.0.8-h4777abc_10.conda"
+checksum = "sha256:24eacc8a20fd7c4616566178562bef7f9344eb4a8700cfc3180fa75a6ff9d39f"
+
+[conda-packages.linux-arm64-musl."c-ares-1.34.8-h29ee22c_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/c-ares-1.34.8-h29ee22c_2.conda"
+checksum = "sha256:3838d10a78c206a1a4ec7ff041880b4f9b8ecde3520c911daae9e06baeb8858e"
+
+[conda-packages.linux-arm64-musl."ca-certificates-2026.7.22-hbd8a1cb_0"]
+url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
+checksum = "sha256:0a0544cf95f64394fe4959286f5c71f5444ad58feb0602e53becb27448d24da6"
 
 [conda-packages.linux-arm64-musl."clang-23-23.1.0-default_h8a521cf_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/clang-23-23.1.0-default_h8a521cf_0.conda"
@@ -194,9 +286,21 @@ checksum = "sha256:25ceb412b6e1750c37ccdca3a70303378e3ac6b665f9b9c6e1575a2af0c68
 url = "https://conda.anaconda.org/conda-forge/noarch/compiler-rt_linux-aarch64-23.1.0-h8af1aa0_0.conda"
 checksum = "sha256:5f34beae9415066ab3f9c22df8591836e72791f35a5eebc723b651994bd87fbd"
 
+[conda-packages.linux-arm64-musl."icu-78.3-py311h3512406_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/icu-78.3-py311h3512406_2.conda"
+checksum = "sha256:54d921defd947adb58a90e10203d3bfe6c1f209f5f1a1ad2c6a9f7617f2fb59e"
+
 [conda-packages.linux-arm64-musl."kernel-headers_linux-aarch64-4.18.0-h05a177a_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-aarch64-4.18.0-h05a177a_9.conda"
 checksum = "sha256:5d224bf4df9bac24e69de41897c53756108c5271a0e5d2d2f66fd4e2fbc1d84b"
+
+[conda-packages.linux-arm64-musl."keyutils-1.6.3-h5bc82ec_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/keyutils-1.6.3-h5bc82ec_1.conda"
+checksum = "sha256:3999b1472f1e549a0b766428e2823abf20626aac5314b474c9b76bf6eb679def"
+
+[conda-packages.linux-arm64-musl."krb5-1.22.2-h095d8e5_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/krb5-1.22.2-h095d8e5_2.conda"
+checksum = "sha256:601d79af94d9562ba70e2d4947034ba159aae293a3c860855335a7c76c14400e"
 
 [conda-packages.linux-arm64-musl."ld_impl_linux-aarch64-2.46.1-default_h1979696_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/ld_impl_linux-aarch64-2.46.1-default_h1979696_102.conda"
@@ -214,6 +318,22 @@ checksum = "sha256:d83b434157fbf1e60d9fbe7aa3e1d42007c78a0f46ca9cb862216dc9224a7
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libcompiler-rt-23.1.0-hde6636f_0.conda"
 checksum = "sha256:a5a636e2110007d708f5b3615b60b59da15973e89cb3573f9869414ff2196086"
 
+[conda-packages.linux-arm64-musl."libcurl-8.21.0-h86273da_5"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libcurl-8.21.0-h86273da_5.conda"
+checksum = "sha256:d7bc660680aee2ce4011779bdfc00b3f8d0c98acf503aa2982874d81b075ff66"
+
+[conda-packages.linux-arm64-musl."libedit-3.1.20250104-pl5321hc48eb74_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libedit-3.1.20250104-pl5321hc48eb74_1.conda"
+checksum = "sha256:2d7218da06f1121619335bff25a2669df810dee90d2eb65b17f8b2e6b1c0d372"
+
+[conda-packages.linux-arm64-musl."libev-4.33-h80f16a2_3"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libev-4.33-h80f16a2_3.conda"
+checksum = "sha256:4475f79a020e9ff2a5a0308c48cb2970a25d55c3dd724a97ab28bfac3be6cd49"
+
+[conda-packages.linux-arm64-musl."libexpat-2.8.1-hfae3067_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libexpat-2.8.1-hfae3067_1.conda"
+checksum = "sha256:20a5726bc8705d91437c9e6ef83b30da64a1719b869656d20a1ee818333ea5ac"
+
 [conda-packages.linux-arm64-musl."libgcc-16.2.0-h205dda4_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-16.2.0-h205dda4_4.conda"
 checksum = "sha256:a132d78d49d0fa0a08e9e2a77528a12d974e8e123bc32895c0bd0a737b8abd89"
@@ -221,6 +341,10 @@ checksum = "sha256:a132d78d49d0fa0a08e9e2a77528a12d974e8e123bc32895c0bd0a737b8ab
 [conda-packages.linux-arm64-musl."libgcc-devel_linux-aarch64-16.2.0-hc0c2482_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libgcc-devel_linux-aarch64-16.2.0-hc0c2482_104.conda"
 checksum = "sha256:6f42cbeb9ed792a535084cee82ada8cdd6a208eed199da1f7e248cae020bfa1e"
+
+[conda-packages.linux-arm64-musl."libgcc-ng-16.2.0-he9431aa_4"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-ng-16.2.0-he9431aa_4.conda"
+checksum = "sha256:e8643044040dd8aa88aee26c19e6b78bbbe0ce8a4d04b1c77ee53c71a1efd814"
 
 [conda-packages.linux-arm64-musl."libgomp-16.2.0-h8acb6b2_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-16.2.0-h8acb6b2_4.conda"
@@ -238,6 +362,18 @@ checksum = "sha256:0565cf53224b6fde27f6ad63d0386f123ad9f4bce8b72ce3fa37bee597163
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_1.conda"
 checksum = "sha256:f760669fd1cea27f689f411c0d5488e26ce50e382c9b63e4ad348f959850124a"
 
+[conda-packages.linux-arm64-musl."libnghttp2-1.68.1-ha4b982d_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-ha4b982d_1.conda"
+checksum = "sha256:0c28d734512fa2c66a232b2f3968eae7124dbd6ad42c594c752f1d08dfb86195"
+
+[conda-packages.linux-arm64-musl."libpsl-0.23.1-hb8431ed_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libpsl-0.23.1-hb8431ed_1.conda"
+checksum = "sha256:757f79c182ac3080cf416acd91c7643b8074b8b2e5c1eba0ffc5a16897feb84b"
+
+[conda-packages.linux-arm64-musl."libssh2-1.11.1-h7572e3e_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libssh2-1.11.1-h7572e3e_1.conda"
+checksum = "sha256:f6fef76c1c8899d7976030871b8cd8016b0a306d2b8519834cd6491d6a42fb82"
+
 [conda-packages.linux-arm64-musl."libstdcxx-16.2.0-hef695bb_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libstdcxx-16.2.0-hef695bb_4.conda"
 checksum = "sha256:84d2b667bce6549325243235952110b1849ff2dfd7091a1479108930b88057d5"
@@ -245,6 +381,10 @@ checksum = "sha256:84d2b667bce6549325243235952110b1849ff2dfd7091a1479108930b8805
 [conda-packages.linux-arm64-musl."libstdcxx-devel_linux-aarch64-16.2.0-h082e5f6_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libstdcxx-devel_linux-aarch64-16.2.0-h082e5f6_104.conda"
 checksum = "sha256:d9c4a9b38184a8eca2c9744b28e153b7924299fc79bc039e032408c8c4a97cb9"
+
+[conda-packages.linux-arm64-musl."libxcrypt-4.4.38-h80f16a2_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libxcrypt-4.4.38-h80f16a2_0.conda"
+checksum = "sha256:d3514900e2121972e435f7803763c1843dad6709e48aa02a2b47c4d481f83be7"
 
 [conda-packages.linux-arm64-musl."libxml2-16-2.15.3-h064b767_1"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/libxml2-16-2.15.3-h064b767_1.conda"
@@ -261,6 +401,26 @@ checksum = "sha256:76efa6cc9d7e6f5ee3bbca0939f64054af2bdfb3c3632531f8e633cf6c2ea
 [conda-packages.linux-arm64-musl."llvm-openmp-23.1.0-hde6636f_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-aarch64/llvm-openmp-23.1.0-hde6636f_0.conda"
 checksum = "sha256:379103e14959c4b81af30ba552b58d03a53bcd9bd49c4501daa7a7461520e28d"
+
+[conda-packages.linux-arm64-musl."ncurses-6.6-h2b6f883_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/ncurses-6.6-h2b6f883_1.conda"
+checksum = "sha256:d69a04914139627f0a6bfd19412d6c7f1e37edc896af84a6011e07e8bc1e69fa"
+
+[conda-packages.linux-arm64-musl."openssl-3.6.4-he6ad1d5_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/openssl-3.6.4-he6ad1d5_0.conda"
+checksum = "sha256:a70c05a9baba9b1ce17c7e8b9479029372069b3bf402dbf200bc03696c531bed"
+
+[conda-packages.linux-arm64-musl."pcre2-10.47-he574923_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/pcre2-10.47-he574923_1.conda"
+checksum = "sha256:16e5bee11686028d60a495004f99a10c613ada44cc27e330bee18a1b67fb184c"
+
+[conda-packages.linux-arm64-musl."perl-5.32.1-7_h31becfc_perl5"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/perl-5.32.1-7_h31becfc_perl5.conda"
+checksum = "sha256:d78296134263b5bf476cad838ded65451e7162db756f9997c5d06b08122572ed"
+
+[conda-packages.linux-arm64-musl."readline-8.3-ha7194a6_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/readline-8.3-ha7194a6_1.conda"
+checksum = "sha256:80167dcf73a96b6d0c1bb2298d7b8b9bc21b27cc5bf56979f9c548b49a4d1722"
 
 [conda-packages.linux-arm64-musl."sysroot_linux-aarch64-2.28-h585391f_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/sysroot_linux-aarch64-2.28-h585391f_9.conda"
@@ -285,6 +445,18 @@ checksum = "sha256:659c367ef49df7741749a2ad240b007d7df51b4f210505a78543deafb001e
 [conda-packages.linux-x64."binutils_impl_linux-64-2.46.1-default_hfdba357_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/binutils_impl_linux-64-2.46.1-default_hfdba357_102.conda"
 checksum = "sha256:fb7bf36984a37ce7e4714d1d1da0bd0e3bfc679520f5cdc184afc676fd4b5da2"
+
+[conda-packages.linux-x64."bzip2-1.0.8-hda65f42_10"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_10.conda"
+checksum = "sha256:1a0d382c515ebf55f8ee1f38c8b81bc95af5c2acc42ad53b66bc5df932032f96"
+
+[conda-packages.linux-x64."c-ares-1.34.8-hebe6cf0_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/c-ares-1.34.8-hebe6cf0_2.conda"
+checksum = "sha256:9c37cc233238adf366ea75b0e845662a5be07ceadf62e458183516369340274b"
+
+[conda-packages.linux-x64."ca-certificates-2026.7.22-hbd8a1cb_0"]
+url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
+checksum = "sha256:0a0544cf95f64394fe4959286f5c71f5444ad58feb0602e53becb27448d24da6"
 
 [conda-packages.linux-x64."clang-23-23.1.0-default_h56ed263_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/clang-23-23.1.0-default_h56ed263_0.conda"
@@ -338,6 +510,14 @@ checksum = "sha256:9f07834f0c546ab14d885ce0366285f61f44e326c0edd1fc63b8294e113ae
 url = "https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-4.18.0-he073ed8_9.conda"
 checksum = "sha256:41557eeadf641de6aeae49486cef30d02a6912d8da98585d687894afd65b356a"
 
+[conda-packages.linux-x64."keyutils-1.6.3-h7cc23a3_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/keyutils-1.6.3-h7cc23a3_1.conda"
+checksum = "sha256:dd053c96dcb0dcfd59422aefea9d2fe937a190167f34fba7893ec1e10a7e8963"
+
+[conda-packages.linux-x64."krb5-1.22.2-hbc21106_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/krb5-1.22.2-hbc21106_2.conda"
+checksum = "sha256:2a5c38c85e63df84c4e69ee71439841ce570d259ae3060627bb9a49a938d66f4"
+
 [conda-packages.linux-x64."ld_impl_linux-64-2.46.1-default_hbd61a6d_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.46.1-default_hbd61a6d_102.conda"
 checksum = "sha256:27d83f1188cd19bcb7754a078b3fa7f4cfb8527f8eb2fde54dd01fc529d1adec"
@@ -354,6 +534,22 @@ checksum = "sha256:f47c5daa06584ce69ca7c0e508550bdc977431ed0d276f8ddd31e88b5a3e5
 url = "https://conda.anaconda.org/conda-forge/linux-64/libcompiler-rt-23.1.0-h7148c6a_0.conda"
 checksum = "sha256:033b2c20cc1c6f12646ed75206f8a74fb0b3735f1fbe5c9dd68aea2a00061ef9"
 
+[conda-packages.linux-x64."libcurl-8.21.0-ha042cf0_5"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libcurl-8.21.0-ha042cf0_5.conda"
+checksum = "sha256:0b6cc13e36cf19ae9b764740112fc591682e189c99353be9f72f3d96ccf29d79"
+
+[conda-packages.linux-x64."libedit-3.1.20250104-pl5321h373387f_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libedit-3.1.20250104-pl5321h373387f_1.conda"
+checksum = "sha256:6473eb8caf2aae830f37caa93db9b26dddf7ac84b63229e8bf7fc0e5c3ab95b0"
+
+[conda-packages.linux-x64."libev-4.33-h280c20c_3"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libev-4.33-h280c20c_3.conda"
+checksum = "sha256:e4418f68d01a6307c4431b585c71b584f40189877364e542ee87deb777f5e85b"
+
+[conda-packages.linux-x64."libexpat-2.8.1-hecca717_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libexpat-2.8.1-hecca717_1.conda"
+checksum = "sha256:16feffd9ddbbe5b718515d38ee376c685ba95491cd901244e24671d20b952a77"
+
 [conda-packages.linux-x64."libgcc-16.2.0-ha9f2e26_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libgcc-16.2.0-ha9f2e26_4.conda"
 checksum = "sha256:24090e675d34403b4ee1cd4372d8f6c0937da7ecfd66a19a57cac2ed0f4ea793"
@@ -361,6 +557,10 @@ checksum = "sha256:24090e675d34403b4ee1cd4372d8f6c0937da7ecfd66a19a57cac2ed0f4ea
 [conda-packages.linux-x64."libgcc-devel_linux-64-16.2.0-he3ce08f_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libgcc-devel_linux-64-16.2.0-he3ce08f_104.conda"
 checksum = "sha256:5365adce4b7564ba3773d037d84070d68ec1269d4b35f3ab92536ee1087a99a5"
+
+[conda-packages.linux-x64."libgcc-ng-16.2.0-h69a702a_4"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-16.2.0-h69a702a_4.conda"
+checksum = "sha256:d8e66c14e23f2b3c70410cff5979d9d357e6edfb990b28d8e630852f4d395629"
 
 [conda-packages.linux-x64."libgomp-16.2.0-he0feb66_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libgomp-16.2.0-he0feb66_4.conda"
@@ -378,6 +578,18 @@ checksum = "sha256:50b31f6c51afe7df0639acf5dde8acf3f4f0dc9f644ab9842b717ae798507
 url = "https://conda.anaconda.org/conda-forge/linux-64/liblzma-5.8.3-hb03c661_1.conda"
 checksum = "sha256:9787df8c22a59c9a70d3e5a10db9ad663485e75e9ccc3f09bd092cb7b95e0dab"
 
+[conda-packages.linux-x64."libnghttp2-1.68.1-h74cf4be_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libnghttp2-1.68.1-h74cf4be_1.conda"
+checksum = "sha256:11a2f54a6f391e25738bce0023e6ef499600147bbcf21c1fa69d2e251b03cc6a"
+
+[conda-packages.linux-x64."libpsl-0.23.1-hd9e3e90_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libpsl-0.23.1-hd9e3e90_1.conda"
+checksum = "sha256:09e8effdc89bc5d021349318d32b85594f5b8d8e3ab8f90a85b81f8fe695a566"
+
+[conda-packages.linux-x64."libssh2-1.11.1-h6154650_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.11.1-h6154650_1.conda"
+checksum = "sha256:7e463000fa1cba3f3a6597b776f6ab301d425a96e3bc20d0d9d76a3b9f237aa3"
+
 [conda-packages.linux-x64."libstdcxx-16.2.0-h934c35e_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-16.2.0-h934c35e_4.conda"
 checksum = "sha256:40b792b0186c1e8859280a1f6f19a54fc50a11b32724fc7b637009c1a9bd302b"
@@ -385,6 +597,10 @@ checksum = "sha256:40b792b0186c1e8859280a1f6f19a54fc50a11b32724fc7b637009c1a9bd3
 [conda-packages.linux-x64."libstdcxx-devel_linux-64-16.2.0-h86e191b_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libstdcxx-devel_linux-64-16.2.0-h86e191b_104.conda"
 checksum = "sha256:435877f29650022730300859dec5c0dee162d10536e1b6fd01cf93ca33a71fde"
+
+[conda-packages.linux-x64."libxcrypt-4.4.38-h280c20c_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libxcrypt-4.4.38-h280c20c_0.conda"
+checksum = "sha256:f7e9292dd219a6435bbb1223da9586c3e70d66d169c5a92f08db3f2127df04e9"
 
 [conda-packages.linux-x64."libxml2-16-2.15.3-hca6bf5a_1"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libxml2-16-2.15.3-hca6bf5a_1.conda"
@@ -401,6 +617,26 @@ checksum = "sha256:eb8a0db0aa570124f7d2a93d7c7f596e3390df5e047818d873baad32985fc
 [conda-packages.linux-x64."llvm-openmp-23.1.0-h7148c6a_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/llvm-openmp-23.1.0-h7148c6a_0.conda"
 checksum = "sha256:b6fa85a30cceca3ad7a811ab34f842b9c2ae9d9d4c520e084b62b2abe50e9a70"
+
+[conda-packages.linux-x64."ncurses-6.6-hdb14827_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.6-hdb14827_1.conda"
+checksum = "sha256:5d46557214ed184381dafe835b7c94a474a1c3b307a08a250b1ea4779b44ffb3"
+
+[conda-packages.linux-x64."openssl-3.6.4-h781a0a9_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/openssl-3.6.4-h781a0a9_0.conda"
+checksum = "sha256:4747b2d6a8336f52343bceb8a1ebf41a9e6e665b9d2e3f989972de53a310599e"
+
+[conda-packages.linux-x64."pcre2-10.47-h8b3dc9c_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/pcre2-10.47-h8b3dc9c_1.conda"
+checksum = "sha256:9ebb10a4eb3be51ae67d85c679f5a7a50cb040ed25c783e6331a225ea09991d4"
+
+[conda-packages.linux-x64."perl-5.32.1-7_hd590300_perl5"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/perl-5.32.1-7_hd590300_perl5.conda"
+checksum = "sha256:9ec32b6936b0e37bcb0ed34f22ec3116e75b3c0964f9f50ecea5f58734ed6ce9"
+
+[conda-packages.linux-x64."readline-8.3-hd6e31c0_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/readline-8.3-hd6e31c0_1.conda"
+checksum = "sha256:01b3fe073a66e321970d09e04b388708f8cbdca5cdfbfcb7c9eeb470ad10383d"
 
 [conda-packages.linux-x64."sysroot_linux-64-2.28-h4ee821c_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/sysroot_linux-64-2.28-h4ee821c_9.conda"
@@ -425,6 +661,18 @@ checksum = "sha256:659c367ef49df7741749a2ad240b007d7df51b4f210505a78543deafb001e
 [conda-packages.linux-x64-musl."binutils_impl_linux-64-2.46.1-default_hfdba357_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/binutils_impl_linux-64-2.46.1-default_hfdba357_102.conda"
 checksum = "sha256:fb7bf36984a37ce7e4714d1d1da0bd0e3bfc679520f5cdc184afc676fd4b5da2"
+
+[conda-packages.linux-x64-musl."bzip2-1.0.8-hda65f42_10"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_10.conda"
+checksum = "sha256:1a0d382c515ebf55f8ee1f38c8b81bc95af5c2acc42ad53b66bc5df932032f96"
+
+[conda-packages.linux-x64-musl."c-ares-1.34.8-hebe6cf0_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/c-ares-1.34.8-hebe6cf0_2.conda"
+checksum = "sha256:9c37cc233238adf366ea75b0e845662a5be07ceadf62e458183516369340274b"
+
+[conda-packages.linux-x64-musl."ca-certificates-2026.7.22-hbd8a1cb_0"]
+url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
+checksum = "sha256:0a0544cf95f64394fe4959286f5c71f5444ad58feb0602e53becb27448d24da6"
 
 [conda-packages.linux-x64-musl."clang-23-23.1.0-default_h56ed263_0"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/clang-23-23.1.0-default_h56ed263_0.conda"
@@ -478,6 +726,14 @@ checksum = "sha256:9f07834f0c546ab14d885ce0366285f61f44e326c0edd1fc63b8294e113ae
 url = "https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-4.18.0-he073ed8_9.conda"
 checksum = "sha256:41557eeadf641de6aeae49486cef30d02a6912d8da98585d687894afd65b356a"
 
+[conda-packages.linux-x64-musl."keyutils-1.6.3-h7cc23a3_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/keyutils-1.6.3-h7cc23a3_1.conda"
+checksum = "sha256:dd053c96dcb0dcfd59422aefea9d2fe937a190167f34fba7893ec1e10a7e8963"
+
+[conda-packages.linux-x64-musl."krb5-1.22.2-hbc21106_2"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/krb5-1.22.2-hbc21106_2.conda"
+checksum = "sha256:2a5c38c85e63df84c4e69ee71439841ce570d259ae3060627bb9a49a938d66f4"
+
 [conda-packages.linux-x64-musl."ld_impl_linux-64-2.46.1-default_hbd61a6d_102"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.46.1-default_hbd61a6d_102.conda"
 checksum = "sha256:27d83f1188cd19bcb7754a078b3fa7f4cfb8527f8eb2fde54dd01fc529d1adec"
@@ -494,6 +750,22 @@ checksum = "sha256:f47c5daa06584ce69ca7c0e508550bdc977431ed0d276f8ddd31e88b5a3e5
 url = "https://conda.anaconda.org/conda-forge/linux-64/libcompiler-rt-23.1.0-h7148c6a_0.conda"
 checksum = "sha256:033b2c20cc1c6f12646ed75206f8a74fb0b3735f1fbe5c9dd68aea2a00061ef9"
 
+[conda-packages.linux-x64-musl."libcurl-8.21.0-ha042cf0_5"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libcurl-8.21.0-ha042cf0_5.conda"
+checksum = "sha256:0b6cc13e36cf19ae9b764740112fc591682e189c99353be9f72f3d96ccf29d79"
+
+[conda-packages.linux-x64-musl."libedit-3.1.20250104-pl5321h373387f_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libedit-3.1.20250104-pl5321h373387f_1.conda"
+checksum = "sha256:6473eb8caf2aae830f37caa93db9b26dddf7ac84b63229e8bf7fc0e5c3ab95b0"
+
+[conda-packages.linux-x64-musl."libev-4.33-h280c20c_3"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libev-4.33-h280c20c_3.conda"
+checksum = "sha256:e4418f68d01a6307c4431b585c71b584f40189877364e542ee87deb777f5e85b"
+
+[conda-packages.linux-x64-musl."libexpat-2.8.1-hecca717_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libexpat-2.8.1-hecca717_1.conda"
+checksum = "sha256:16feffd9ddbbe5b718515d38ee376c685ba95491cd901244e24671d20b952a77"
+
 [conda-packages.linux-x64-musl."libgcc-16.2.0-ha9f2e26_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libgcc-16.2.0-ha9f2e26_4.conda"
 checksum = "sha256:24090e675d34403b4ee1cd4372d8f6c0937da7ecfd66a19a57cac2ed0f4ea793"
@@ -501,6 +773,10 @@ checksum = "sha256:24090e675d34403b4ee1cd4372d8f6c0937da7ecfd66a19a57cac2ed0f4ea
 [conda-packages.linux-x64-musl."libgcc-devel_linux-64-16.2.0-he3ce08f_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libgcc-devel_linux-64-16.2.0-he3ce08f_104.conda"
 checksum = "sha256:5365adce4b7564ba3773d037d84070d68ec1269d4b35f3ab92536ee1087a99a5"
+
+[conda-packages.linux-x64-musl."libgcc-ng-16.2.0-h69a702a_4"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-16.2.0-h69a702a_4.conda"
+checksum = "sha256:d8e66c14e23f2b3c70410cff5979d9d357e6edfb990b28d8e630852f4d395629"
 
 [conda-packages.linux-x64-musl."libgomp-16.2.0-he0feb66_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libgomp-16.2.0-he0feb66_4.conda"
@@ -518,6 +794,18 @@ checksum = "sha256:50b31f6c51afe7df0639acf5dde8acf3f4f0dc9f644ab9842b717ae798507
 url = "https://conda.anaconda.org/conda-forge/linux-64/liblzma-5.8.3-hb03c661_1.conda"
 checksum = "sha256:9787df8c22a59c9a70d3e5a10db9ad663485e75e9ccc3f09bd092cb7b95e0dab"
 
+[conda-packages.linux-x64-musl."libnghttp2-1.68.1-h74cf4be_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libnghttp2-1.68.1-h74cf4be_1.conda"
+checksum = "sha256:11a2f54a6f391e25738bce0023e6ef499600147bbcf21c1fa69d2e251b03cc6a"
+
+[conda-packages.linux-x64-musl."libpsl-0.23.1-hd9e3e90_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libpsl-0.23.1-hd9e3e90_1.conda"
+checksum = "sha256:09e8effdc89bc5d021349318d32b85594f5b8d8e3ab8f90a85b81f8fe695a566"
+
+[conda-packages.linux-x64-musl."libssh2-1.11.1-h6154650_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.11.1-h6154650_1.conda"
+checksum = "sha256:7e463000fa1cba3f3a6597b776f6ab301d425a96e3bc20d0d9d76a3b9f237aa3"
+
 [conda-packages.linux-x64-musl."libstdcxx-16.2.0-h934c35e_4"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-16.2.0-h934c35e_4.conda"
 checksum = "sha256:40b792b0186c1e8859280a1f6f19a54fc50a11b32724fc7b637009c1a9bd302b"
@@ -525,6 +813,10 @@ checksum = "sha256:40b792b0186c1e8859280a1f6f19a54fc50a11b32724fc7b637009c1a9bd3
 [conda-packages.linux-x64-musl."libstdcxx-devel_linux-64-16.2.0-h86e191b_104"]
 url = "https://conda.anaconda.org/conda-forge/noarch/libstdcxx-devel_linux-64-16.2.0-h86e191b_104.conda"
 checksum = "sha256:435877f29650022730300859dec5c0dee162d10536e1b6fd01cf93ca33a71fde"
+
+[conda-packages.linux-x64-musl."libxcrypt-4.4.38-h280c20c_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/libxcrypt-4.4.38-h280c20c_0.conda"
+checksum = "sha256:f7e9292dd219a6435bbb1223da9586c3e70d66d169c5a92f08db3f2127df04e9"
 
 [conda-packages.linux-x64-musl."libxml2-16-2.15.3-hca6bf5a_1"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/libxml2-16-2.15.3-hca6bf5a_1.conda"
@@ -542,6 +834,26 @@ checksum = "sha256:eb8a0db0aa570124f7d2a93d7c7f596e3390df5e047818d873baad32985fc
 url = "https://conda.anaconda.org/conda-forge/linux-64/llvm-openmp-23.1.0-h7148c6a_0.conda"
 checksum = "sha256:b6fa85a30cceca3ad7a811ab34f842b9c2ae9d9d4c520e084b62b2abe50e9a70"
 
+[conda-packages.linux-x64-musl."ncurses-6.6-hdb14827_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.6-hdb14827_1.conda"
+checksum = "sha256:5d46557214ed184381dafe835b7c94a474a1c3b307a08a250b1ea4779b44ffb3"
+
+[conda-packages.linux-x64-musl."openssl-3.6.4-h781a0a9_0"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/openssl-3.6.4-h781a0a9_0.conda"
+checksum = "sha256:4747b2d6a8336f52343bceb8a1ebf41a9e6e665b9d2e3f989972de53a310599e"
+
+[conda-packages.linux-x64-musl."pcre2-10.47-h8b3dc9c_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/pcre2-10.47-h8b3dc9c_1.conda"
+checksum = "sha256:9ebb10a4eb3be51ae67d85c679f5a7a50cb040ed25c783e6331a225ea09991d4"
+
+[conda-packages.linux-x64-musl."perl-5.32.1-7_hd590300_perl5"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/perl-5.32.1-7_hd590300_perl5.conda"
+checksum = "sha256:9ec32b6936b0e37bcb0ed34f22ec3116e75b3c0964f9f50ecea5f58734ed6ce9"
+
+[conda-packages.linux-x64-musl."readline-8.3-hd6e31c0_1"]
+url = "https://conda.anaconda.org/conda-forge/linux-64/readline-8.3-hd6e31c0_1.conda"
+checksum = "sha256:01b3fe073a66e321970d09e04b388708f8cbdca5cdfbfcb7c9eeb470ad10383d"
+
 [conda-packages.linux-x64-musl."sysroot_linux-64-2.28-h4ee821c_9"]
 url = "https://conda.anaconda.org/conda-forge/noarch/sysroot_linux-64-2.28-h4ee821c_9.conda"
 checksum = "sha256:c47299fe37aebb0fcf674b3be588e67e4afb86225be4b0d452c7eb75c086b851"
@@ -553,6 +865,14 @@ checksum = "sha256:b928c30ddcb0e3f544c6eade8352737e6e610e263276b90232db6a578ef89
 [conda-packages.linux-x64-musl."zstd-1.5.7-hb78ec9c_7"]
 url = "https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_7.conda"
 checksum = "sha256:47d682b9f6d6ec9eb1a6e6c3e75ea6273e899e78fb7fc59f81d39745009fbc60"
+
+[conda-packages.macos-arm64."bzip2-1.0.8-h4e30115_10"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/bzip2-1.0.8-h4e30115_10.conda"
+checksum = "sha256:8ec22f0ba25cbfc2e64d70cf29459eccd7ffdf6436f6a6ff15bbfef799f7d4f6"
+
+[conda-packages.macos-arm64."c-ares-1.34.8-h74c22ad_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/c-ares-1.34.8-h74c22ad_2.conda"
+checksum = "sha256:82bdd5a3fcada6afef6255a9bf41172f07b362f36e04a354dc2abc0a29bfb756"
 
 [conda-packages.macos-arm64."ca-certificates-2026.7.22-hbd8a1cb_0"]
 url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
@@ -610,6 +930,14 @@ checksum = "sha256:6ab51da106e7a843573cc826de32216a233665bf3cd5afd90538bffd12d2c
 url = "https://conda.anaconda.org/conda-forge/noarch/compiler-rt_osx-arm64-23.1.0-hce30654_0.conda"
 checksum = "sha256:64fe8f504c664701e2f71f7ae66e319c60443b5c07acfafbd72ee5734f76dc21"
 
+[conda-packages.macos-arm64."icu-78.3-py310h579977c_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/icu-78.3-py310h579977c_2.conda"
+checksum = "sha256:6cdb5dee54c72e56ab189fb3ad33cb28533553d42590e7e831160248f4416a43"
+
+[conda-packages.macos-arm64."krb5-1.22.2-h34f8a20_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/krb5-1.22.2-h34f8a20_2.conda"
+checksum = "sha256:aaea1d42b07769920db2af7471ece9399d2613448863da64ad8272998db5db34"
+
 [conda-packages.macos-arm64."ld64-956.6-llvm23_1_hd841b0c_6"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/ld64-956.6-llvm23_1_hd841b0c_6.conda"
 checksum = "sha256:aa34de810767f7d92721aeab004479672853f2fb9235a3e9c350db41c0c86112"
@@ -630,6 +958,10 @@ checksum = "sha256:63826b987869484f12080cd379189d010797558a08b3052760620915455cc
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libcompiler-rt-23.1.0-hdb3d66b_0.conda"
 checksum = "sha256:edce699ad7485a61911d6ed26b325dd4b0b662f004e35140c4c075f3e7e6e633"
 
+[conda-packages.macos-arm64."libcurl-8.21.0-h6651222_5"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libcurl-8.21.0-h6651222_5.conda"
+checksum = "sha256:59dd850def9473e7f63ed72afc750bba9670316f279c0bd409572cd47569ed5f"
+
 [conda-packages.macos-arm64."libcxx-23.1.0-h55c6f16_0"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-23.1.0-h55c6f16_0.conda"
 checksum = "sha256:d3e5f0b767964af25ef81edffc002f8e822b1a5c55330da1ae3a857f70c4e4ee"
@@ -642,9 +974,25 @@ checksum = "sha256:e525a2478923585f0bf2b1f800c2f49a46e9b403069255b338676ff3b1632
 url = "https://conda.anaconda.org/conda-forge/noarch/libcxx-headers-23.1.0-h707e725_0.conda"
 checksum = "sha256:617c451ba99dcdc4b920f59f3a9f56f43ecf7b8caa4b38a83cab77a0fc38241c"
 
+[conda-packages.macos-arm64."libedit-3.1.20250104-pl5321h26f1114_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libedit-3.1.20250104-pl5321h26f1114_1.conda"
+checksum = "sha256:257c926f19e32bdb981fc674c76966049b6fc73f706bae58e9fed8757ad1da70"
+
+[conda-packages.macos-arm64."libev-4.33-h1a92334_3"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libev-4.33-h1a92334_3.conda"
+checksum = "sha256:c0100064506ae8abb432c5a506d474f10af2cf48c33d62bc221fb28b6d6ff6ac"
+
+[conda-packages.macos-arm64."libexpat-2.8.1-hf6b4638_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.8.1-hf6b4638_1.conda"
+checksum = "sha256:5af74261101e3c777399c6294b2b5d290e508153268eb2e9ff99c4d69834612f"
+
 [conda-packages.macos-arm64."libiconv-1.18-he4c29f2_3"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libiconv-1.18-he4c29f2_3.conda"
 checksum = "sha256:689a14968267f2f97c07112fca5636e7d756036b9aee969911267c20bd3eea1f"
+
+[conda-packages.macos-arm64."libintl-0.25.1-h493aca8_0"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libintl-0.25.1-h493aca8_0.conda"
+checksum = "sha256:99d2cebcd8f84961b86784451b010f5f0a795ed1c08f1e7c76fbb3c22abf021a"
 
 [conda-packages.macos-arm64."libllvm23-23.1.0-h759d1ac_0"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libllvm23-23.1.0-h759d1ac_0.conda"
@@ -654,9 +1002,21 @@ checksum = "sha256:da56254c1c055162230f21de04245f61937933d0f590acafbecc0ca74ca27
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_1.conda"
 checksum = "sha256:23d0630046a3e8b164d8f80f2b74ed2605af2e7050ab9913018056402fae4311"
 
+[conda-packages.macos-arm64."libnghttp2-1.68.1-h435687b_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libnghttp2-1.68.1-h435687b_1.conda"
+checksum = "sha256:445440d8cccccb6585f71d1eb7c949d64a2af2ced5481d924621424ff3b6a398"
+
+[conda-packages.macos-arm64."libpsl-0.23.1-hdb0c161_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libpsl-0.23.1-hdb0c161_1.conda"
+checksum = "sha256:c8c3153df39abedf3413483f672151ad70f1adb0c06c192bdf7ec432c3616b07"
+
 [conda-packages.macos-arm64."libsigtool-0.1.3-h98dc951_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libsigtool-0.1.3-h98dc951_1.conda"
 checksum = "sha256:fcfa03afe31f40dfabf011629d99836adbebbc3ed1b38c7e9eee9ffc7581975b"
+
+[conda-packages.macos-arm64."libssh2-1.11.1-hbf2880b_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/libssh2-1.11.1-hbf2880b_1.conda"
+checksum = "sha256:a056e518c3d2d09fbb1778cea80c0c95338fb24adf1a817bbf90fb484850a304"
 
 [conda-packages.macos-arm64."libxml2-16-2.15.3-h6967ea9_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/libxml2-16-2.15.3-h6967ea9_1.conda"
@@ -690,6 +1050,18 @@ checksum = "sha256:7024a48c8c0d0114ed4ab53c76bf9275d50e91ba7cea367a9aead638d3c29
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.6.4-h55eecbc_0.conda"
 checksum = "sha256:f23239eacd75c4c50705e68fae1aa3292da473e6a3a4abe2330f1e6afa680704"
 
+[conda-packages.macos-arm64."pcre2-10.47-he63d830_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/pcre2-10.47-he63d830_1.conda"
+checksum = "sha256:f8c415329b542e1fca1ff2917b80e687c18302dfa0353530668b90cb225b494f"
+
+[conda-packages.macos-arm64."perl-5.32.1-7_h4614cfb_perl5"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/perl-5.32.1-7_h4614cfb_perl5.conda"
+checksum = "sha256:b0c55040d2994fd6bf2f83786561d92f72306d982d6ea12889acad24a9bf43b8"
+
+[conda-packages.macos-arm64."readline-8.3-h8b90a29_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/readline-8.3-h8b90a29_1.conda"
+checksum = "sha256:d6782b430e6dce4fe8c7ac118cd988d5a193eb4a7f60741edfaede58016b6110"
+
 [conda-packages.macos-arm64."sigtool-codesign-0.1.3-h98dc951_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/sigtool-codesign-0.1.3-h98dc951_1.conda"
 checksum = "sha256:7efd6d7d18bf9cc5788bfe1c1e1620d9dbbe00a81c646814929a82ff31944cf3"
@@ -701,6 +1073,14 @@ checksum = "sha256:9f1cc109e6e57861110e9de6e03beca7fd2b7fbdb46124cccc07990b0844d
 [conda-packages.macos-arm64."zstd-1.5.7-hf451053_7"]
 url = "https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hf451053_7.conda"
 checksum = "sha256:da867f5092eb0cb746d353694f0098031fd9817a4ce7d5743121209ae0f406ca"
+
+[conda-packages.macos-x64."bzip2-1.0.8-h374f1ed_10"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/bzip2-1.0.8-h374f1ed_10.conda"
+checksum = "sha256:4ed83961876dc8844a6f0df49c07b408efbaea275ffb0b37133e24c006990b3a"
+
+[conda-packages.macos-x64."c-ares-1.34.8-had63097_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/c-ares-1.34.8-had63097_2.conda"
+checksum = "sha256:a00162ac4b2f68a6ddf23905e9d2fdb3ecd5abad51659f512539952a780d53ed"
 
 [conda-packages.macos-x64."ca-certificates-2026.7.22-hbd8a1cb_0"]
 url = "https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda"
@@ -758,6 +1138,14 @@ checksum = "sha256:a59bb35a997f33893041733ef4f7ad6fdff10e45c345e9850f5c9324dfbde
 url = "https://conda.anaconda.org/conda-forge/noarch/compiler-rt_osx-64-23.1.0-h694c41f_0.conda"
 checksum = "sha256:c71b74ee16d22701d6366fe534c42bc1af936dc883e2495de44a62d7f8aad648"
 
+[conda-packages.macos-x64."icu-78.3-py313hbf1d544_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/icu-78.3-py313hbf1d544_2.conda"
+checksum = "sha256:3abd86f3441f143b6b3203c92ae0d88dd8396a8857940af468f1fab854cdae57"
+
+[conda-packages.macos-x64."krb5-1.22.2-h69064fd_2"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/krb5-1.22.2-h69064fd_2.conda"
+checksum = "sha256:f41875ab241c4862b6bdb8316e5f4268ee8ff9e9115770d3d30a02028957c7c1"
+
 [conda-packages.macos-x64."ld64-956.6-llvm23_1_h0b736ef_6"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/ld64-956.6-llvm23_1_h0b736ef_6.conda"
 checksum = "sha256:11a6c36fd6207683a57d5e91533d3ce1756c1fc7e2a30504de8686ac867a8f0b"
@@ -778,6 +1166,10 @@ checksum = "sha256:2098a57d05681ba7c4dd99ebd821d017eb9a31f2925d9e251f33cb369dda4
 url = "https://conda.anaconda.org/conda-forge/osx-64/libcompiler-rt-23.1.0-h8c1e6b9_0.conda"
 checksum = "sha256:aee2acc2a2e6ed6792f018ada0c630ac24618cf4b403ebae5ecac4da75c6d7c8"
 
+[conda-packages.macos-x64."libcurl-8.21.0-h5318221_5"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libcurl-8.21.0-h5318221_5.conda"
+checksum = "sha256:7dee3a3eb2e6a639a6651c44d487ec62a0a5449184210b7cf3d0defc751b14b4"
+
 [conda-packages.macos-x64."libcxx-23.1.0-h19cb2f5_0"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/libcxx-23.1.0-h19cb2f5_0.conda"
 checksum = "sha256:da5b60cbdaf8d931e2534f3b17a0d9b5432ebc855509d36618d61a61f1f2909d"
@@ -790,9 +1182,25 @@ checksum = "sha256:ca264259f5005ee36a54e79852caf66ade0c80dfe6615a359b690c366537d
 url = "https://conda.anaconda.org/conda-forge/noarch/libcxx-headers-23.1.0-h707e725_0.conda"
 checksum = "sha256:617c451ba99dcdc4b920f59f3a9f56f43ecf7b8caa4b38a83cab77a0fc38241c"
 
+[conda-packages.macos-x64."libedit-3.1.20250104-pl5321hba2e2ab_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libedit-3.1.20250104-pl5321hba2e2ab_1.conda"
+checksum = "sha256:4aa5161db41602af1abff73f5af415902135a47855d02c1ac05681a36320bd4b"
+
+[conda-packages.macos-x64."libev-4.33-ha3d0635_3"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libev-4.33-ha3d0635_3.conda"
+checksum = "sha256:223314a7476bdeb00f698937b6960fc51cb98627af2ac5a629e5150bcddb8abf"
+
+[conda-packages.macos-x64."libexpat-2.8.1-hcc62823_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.8.1-hcc62823_1.conda"
+checksum = "sha256:9c96cc05e056e1bba5b545cbbd57b6e01db622dc2c82934caaaa25cfb22fe666"
+
 [conda-packages.macos-x64."libiconv-1.18-h4ae439b_3"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/libiconv-1.18-h4ae439b_3.conda"
 checksum = "sha256:2389e03a58ed0f5e8f2469eb4d4ba80d0af378b38854ae5eee65e5b641244082"
+
+[conda-packages.macos-x64."libintl-0.25.1-h3184127_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libintl-0.25.1-h3184127_1.conda"
+checksum = "sha256:8c352744517bc62d24539d1ecc813b9fdc8a785c780197c5f0b84ec5b0dfe122"
 
 [conda-packages.macos-x64."libllvm23-23.1.0-hd11396f_0"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/libllvm23-23.1.0-hd11396f_0.conda"
@@ -802,9 +1210,21 @@ checksum = "sha256:381f2746db9673fc47ee163af3bdb19f6f98e776e54aa5ecfd200b637228f
 url = "https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_1.conda"
 checksum = "sha256:7915dac7c71c208e40e716e2f6d3eff41a8d5584e0e7c2d46f9bf9bd5f9aa739"
 
+[conda-packages.macos-x64."libnghttp2-1.68.1-h1e30255_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libnghttp2-1.68.1-h1e30255_1.conda"
+checksum = "sha256:2d5c131553e83089be74988529d758e2a6dbb9227056d8fa19c01f5ccef6e6fc"
+
+[conda-packages.macos-x64."libpsl-0.23.1-h7ff43d8_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libpsl-0.23.1-h7ff43d8_1.conda"
+checksum = "sha256:6ee1849c23ddd4de76bacdcf88d4d16dc28fc10aa7c3431f859ef392da6936b8"
+
 [conda-packages.macos-x64."libsigtool-0.1.3-h8c25ef7_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/libsigtool-0.1.3-h8c25ef7_1.conda"
 checksum = "sha256:c3d76ff04ebed64d00a7ff5106297a55af20082a3d3df0ea7dfb235f94ba31c3"
+
+[conda-packages.macos-x64."libssh2-1.11.1-hd53bb72_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/libssh2-1.11.1-hd53bb72_1.conda"
+checksum = "sha256:ed0db46844a548f4ca57dad0b3abb92b37050d7f75ab1ef08fbed9d23f06b2de"
 
 [conda-packages.macos-x64."libxml2-16-2.15.3-h0d7f165_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/libxml2-16-2.15.3-h0d7f165_1.conda"
@@ -837,6 +1257,18 @@ checksum = "sha256:12c1d676b9a0e8109b576672519312c5428308f3f3d7706f8717e2f536d5d
 [conda-packages.macos-x64."openssl-3.6.4-h332eb6d_0"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/openssl-3.6.4-h332eb6d_0.conda"
 checksum = "sha256:73d648d24f0994fd8641972848d74bd57b8d80888a64600643e3fe88a1b50545"
+
+[conda-packages.macos-x64."pcre2-10.47-h31793e3_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/pcre2-10.47-h31793e3_1.conda"
+checksum = "sha256:9b3d0022e9f97939f7ea46661a4ef340c41ea137976bd38cfc4f7c5808a335d9"
+
+[conda-packages.macos-x64."perl-5.32.1-7_h10d778d_perl5"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/perl-5.32.1-7_h10d778d_perl5.conda"
+checksum = "sha256:8ebd35e2940055a93135b9fd11bef3662cecef72d6ee651f68d64a2f349863c7"
+
+[conda-packages.macos-x64."readline-8.3-h000c2f7_1"]
+url = "https://conda.anaconda.org/conda-forge/osx-64/readline-8.3-h000c2f7_1.conda"
+checksum = "sha256:feb9248a062b7a0738e56339d8c9e87bc9adf8e8c76549fb55b0b2456bec3a57"
 
 [conda-packages.macos-x64."sigtool-codesign-0.1.3-h8c25ef7_1"]
 url = "https://conda.anaconda.org/conda-forge/osx-64/sigtool-codesign-0.1.3-h8c25ef7_1.conda"
@@ -1008,6 +1440,114 @@ url_api = "https://api.github.com/repos/Kitware/CMake/releases/assets/529577557"
 checksum = "sha256:4d52ebab7193a698651639ed80d8d04fd903358843572cf44c7fd234cb7c26ab"
 url = "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-windows-x86_64.zip"
 url_api = "https://api.github.com/repos/Kitware/CMake/releases/assets/529578311"
+
+[[tools.codex]]
+version = "0.150.0"
+backend = "aqua:openai/codex"
+specifiers = ["0.150.0"]
+
+[tools.codex."platforms.linux-arm64"]
+checksum = "sha256:834a15a0112e65520c56e716250992f130a484079c79bca93d91232d8a68b64d"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243971"
+
+[tools.codex."platforms.linux-arm64-musl"]
+checksum = "sha256:834a15a0112e65520c56e716250992f130a484079c79bca93d91232d8a68b64d"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243971"
+
+[tools.codex."platforms.linux-x64"]
+checksum = "sha256:2d27b8569ca760eeb2bf21fa12bd31f59ac42b81617b340cf8958e9b38d743d5"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243934"
+
+[tools.codex."platforms.linux-x64-musl"]
+checksum = "sha256:2d27b8569ca760eeb2bf21fa12bd31f59ac42b81617b340cf8958e9b38d743d5"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243934"
+
+[tools.codex."platforms.macos-arm64"]
+checksum = "sha256:4a95905fc9ce4ab635bb6ad79a80a25c2b01cad52c37a8266a4d383a1d405c89"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531244029"
+
+[tools.codex."platforms.macos-x64"]
+checksum = "sha256:130f119271a288c0d6140e2223fc221438287232ef8b161efcb9041076e83fc2"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243959"
+
+[tools.codex."platforms.windows-x64"]
+checksum = "sha256:92d63020c45d2b7a3a3c2734f1edf153b2e39b0570f9e14613051a773206e8c1"
+url = "https://github.com/openai/codex/releases/download/rust-v0.150.0/codex-package-x86_64-pc-windows-msvc.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/531243926"
+
+[[tools."conda:bash"]]
+version = "5.2.37"
+backend = "conda:bash"
+specifiers = ["5.2.37"]
+
+[tools."conda:bash".options]
+channel = "conda-forge"
+
+[tools."conda:bash"."platforms.linux-arm64"]
+checksum = "sha256:0df286832f456d39916371735b1edaa4db8bb847e642b62fabdcc158a18dddf1"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/bash-5.2.37-ha0fa457_0.conda"
+conda_deps = [
+    "readline-8.3-ha7194a6_1",
+    "libgcc-16.2.0-h205dda4_4",
+    "ncurses-6.6-h2b6f883_1",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+]
+
+[tools."conda:bash"."platforms.linux-arm64-musl"]
+checksum = "sha256:0df286832f456d39916371735b1edaa4db8bb847e642b62fabdcc158a18dddf1"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/bash-5.2.37-ha0fa457_0.conda"
+conda_deps = [
+    "readline-8.3-ha7194a6_1",
+    "libgcc-16.2.0-h205dda4_4",
+    "ncurses-6.6-h2b6f883_1",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+]
+
+[tools."conda:bash"."platforms.linux-x64"]
+checksum = "sha256:a0ce6ed2b346501be1fcae415e4df04618f822834902dc22174a350ae39c791e"
+url = "https://conda.anaconda.org/conda-forge/linux-64/bash-5.2.37-h4be8908_0.conda"
+conda_deps = [
+    "readline-8.3-hd6e31c0_1",
+    "libgcc-16.2.0-ha9f2e26_4",
+    "ncurses-6.6-hdb14827_1",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+]
+
+[tools."conda:bash"."platforms.linux-x64-musl"]
+checksum = "sha256:a0ce6ed2b346501be1fcae415e4df04618f822834902dc22174a350ae39c791e"
+url = "https://conda.anaconda.org/conda-forge/linux-64/bash-5.2.37-h4be8908_0.conda"
+conda_deps = [
+    "readline-8.3-hd6e31c0_1",
+    "libgcc-16.2.0-ha9f2e26_4",
+    "ncurses-6.6-hdb14827_1",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+]
+
+[tools."conda:bash"."platforms.macos-arm64"]
+checksum = "sha256:9addc6fab5b01dc2d4bc58b15cf7df2352a2cbd4c2344c70f2de70243c60e548"
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/bash-5.2.37-h5b2bd6a_0.conda"
+conda_deps = [
+    "readline-8.3-h8b90a29_1",
+    "ncurses-6.6-he64c551_1",
+]
+
+[tools."conda:bash"."platforms.macos-x64"]
+checksum = "sha256:02d11f98143dbecc3537cc608874e3c39f10c91ab245a9922efd69e5f706e9d5"
+url = "https://conda.anaconda.org/conda-forge/osx-64/bash-5.2.37-h9edc32d_0.conda"
+conda_deps = [
+    "readline-8.3-h000c2f7_1",
+    "ncurses-6.6-hcc0dc9a_1",
+]
 
 [[tools."conda:clang-tools"]]
 version = "23.1.0"
@@ -1431,6 +1971,255 @@ conda_deps = [
     "liblzma-5.8.3-hfd05255_1",
 ]
 
+[[tools."conda:coreutils"]]
+version = "9.11"
+backend = "conda:coreutils"
+specifiers = ["9.11"]
+
+[tools."conda:coreutils".options]
+channel = "conda-forge"
+
+[tools."conda:coreutils"."platforms.linux-arm64"]
+checksum = "sha256:3410b19e09e7d4ce34dd18ac6d2371c0bf04e17c20df1a92bd0161dcbea83c78"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/coreutils-9.11-h80f16a2_0.conda"
+conda_deps = [
+    "libgcc-16.2.0-h205dda4_4",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+]
+
+[tools."conda:coreutils"."platforms.linux-arm64-musl"]
+checksum = "sha256:3410b19e09e7d4ce34dd18ac6d2371c0bf04e17c20df1a92bd0161dcbea83c78"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/coreutils-9.11-h80f16a2_0.conda"
+conda_deps = [
+    "libgcc-16.2.0-h205dda4_4",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+]
+
+[tools."conda:coreutils"."platforms.linux-x64"]
+checksum = "sha256:6b19fb6c45302bdd6c97c5ac219e14bcbb7d9055c758e79d8a2577e705a933f0"
+url = "https://conda.anaconda.org/conda-forge/linux-64/coreutils-9.11-h280c20c_0.conda"
+conda_deps = [
+    "libgcc-16.2.0-ha9f2e26_4",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+]
+
+[tools."conda:coreutils"."platforms.linux-x64-musl"]
+checksum = "sha256:6b19fb6c45302bdd6c97c5ac219e14bcbb7d9055c758e79d8a2577e705a933f0"
+url = "https://conda.anaconda.org/conda-forge/linux-64/coreutils-9.11-h280c20c_0.conda"
+conda_deps = [
+    "libgcc-16.2.0-ha9f2e26_4",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+]
+
+[tools."conda:coreutils"."platforms.macos-arm64"]
+checksum = "sha256:c121e881b96fdbb1f91fbd1e288c9eab062b345f381521db27a514669c1fc5ef"
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/coreutils-9.11-h1a92334_0.conda"
+conda_deps = []
+
+[tools."conda:coreutils"."platforms.macos-x64"]
+checksum = "sha256:4d13c876757e1b744be1a18ee9f6787dd2b968aea30a8849823f723da7c5c048"
+url = "https://conda.anaconda.org/conda-forge/osx-64/coreutils-9.11-ha3d0635_0.conda"
+conda_deps = []
+
+[[tools."conda:git"]]
+version = "2.55.0"
+backend = "conda:git"
+specifiers = ["2.55.0"]
+
+[tools."conda:git".options]
+channel = "conda-forge"
+
+[tools."conda:git"."platforms.linux-arm64"]
+checksum = "sha256:02615f600a0d4242dcedcb7ebd8f1faa02f7136551cc3e804fc879a015237644"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/git-2.55.0-pl5321h06f7e71_1.conda"
+conda_deps = [
+    "libcurl-8.21.0-h86273da_5",
+    "libexpat-2.8.1-hfae3067_1",
+    "libzlib-1.3.2-hdc9db2a_3",
+    "pcre2-10.47-he574923_1",
+    "libgcc-16.2.0-h205dda4_4",
+    "libiconv-1.18-h1ea5142_3",
+    "openssl-3.6.4-he6ad1d5_0",
+    "perl-5.32.1-7_h31becfc_perl5",
+    "libgcc-ng-16.2.0-he9431aa_4",
+    "krb5-1.22.2-h095d8e5_2",
+    "libstdcxx-16.2.0-hef695bb_4",
+    "libnghttp2-1.68.1-ha4b982d_1",
+    "libpsl-0.23.1-hb8431ed_1",
+    "libssh2-1.11.1-h7572e3e_1",
+    "zstd-1.5.7-h9d15635_7",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-h4777abc_10",
+    "libxcrypt-4.4.38-h80f16a2_0",
+    "keyutils-1.6.3-h5bc82ec_1",
+    "libedit-3.1.20250104-pl5321hc48eb74_1",
+    "c-ares-1.34.8-h29ee22c_2",
+    "libev-4.33-h80f16a2_3",
+    "icu-78.3-py311h3512406_2",
+    "ncurses-6.6-h2b6f883_1",
+]
+
+[tools."conda:git"."platforms.linux-arm64-musl"]
+checksum = "sha256:02615f600a0d4242dcedcb7ebd8f1faa02f7136551cc3e804fc879a015237644"
+url = "https://conda.anaconda.org/conda-forge/linux-aarch64/git-2.55.0-pl5321h06f7e71_1.conda"
+conda_deps = [
+    "libcurl-8.21.0-h86273da_5",
+    "libexpat-2.8.1-hfae3067_1",
+    "libzlib-1.3.2-hdc9db2a_3",
+    "pcre2-10.47-he574923_1",
+    "libgcc-16.2.0-h205dda4_4",
+    "libiconv-1.18-h1ea5142_3",
+    "openssl-3.6.4-he6ad1d5_0",
+    "perl-5.32.1-7_h31becfc_perl5",
+    "libgcc-ng-16.2.0-he9431aa_4",
+    "krb5-1.22.2-h095d8e5_2",
+    "libstdcxx-16.2.0-hef695bb_4",
+    "libnghttp2-1.68.1-ha4b982d_1",
+    "libpsl-0.23.1-hb8431ed_1",
+    "libssh2-1.11.1-h7572e3e_1",
+    "zstd-1.5.7-h9d15635_7",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-h8acb6b2_4",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-h4777abc_10",
+    "libxcrypt-4.4.38-h80f16a2_0",
+    "keyutils-1.6.3-h5bc82ec_1",
+    "libedit-3.1.20250104-pl5321hc48eb74_1",
+    "c-ares-1.34.8-h29ee22c_2",
+    "libev-4.33-h80f16a2_3",
+    "icu-78.3-py311h3512406_2",
+    "ncurses-6.6-h2b6f883_1",
+]
+
+[tools."conda:git"."platforms.linux-x64"]
+checksum = "sha256:ffe825e3ff78876dc5aa28eee791d8d9be4a47157761aa38dbff79e9222b3b8e"
+url = "https://conda.anaconda.org/conda-forge/linux-64/git-2.55.0-pl5321h5685339_1.conda"
+conda_deps = [
+    "libexpat-2.8.1-hecca717_1",
+    "libzlib-1.3.2-h25fd6f3_3",
+    "pcre2-10.47-h8b3dc9c_1",
+    "libcurl-8.21.0-ha042cf0_5",
+    "libgcc-16.2.0-ha9f2e26_4",
+    "libiconv-1.18-h0cb94f2_3",
+    "openssl-3.6.4-h781a0a9_0",
+    "perl-5.32.1-7_hd590300_perl5",
+    "libgcc-ng-16.2.0-h69a702a_4",
+    "krb5-1.22.2-hbc21106_2",
+    "libstdcxx-16.2.0-h934c35e_4",
+    "libnghttp2-1.68.1-h74cf4be_1",
+    "libpsl-0.23.1-hd9e3e90_1",
+    "libssh2-1.11.1-h6154650_1",
+    "zstd-1.5.7-hb78ec9c_7",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-hda65f42_10",
+    "libxcrypt-4.4.38-h280c20c_0",
+    "keyutils-1.6.3-h7cc23a3_1",
+    "libedit-3.1.20250104-pl5321h373387f_1",
+    "c-ares-1.34.8-hebe6cf0_2",
+    "libev-4.33-h280c20c_3",
+    "icu-78.3-py310h44b86e0_2",
+    "ncurses-6.6-hdb14827_1",
+]
+
+[tools."conda:git"."platforms.linux-x64-musl"]
+checksum = "sha256:ffe825e3ff78876dc5aa28eee791d8d9be4a47157761aa38dbff79e9222b3b8e"
+url = "https://conda.anaconda.org/conda-forge/linux-64/git-2.55.0-pl5321h5685339_1.conda"
+conda_deps = [
+    "libexpat-2.8.1-hecca717_1",
+    "libzlib-1.3.2-h25fd6f3_3",
+    "pcre2-10.47-h8b3dc9c_1",
+    "libcurl-8.21.0-ha042cf0_5",
+    "libgcc-16.2.0-ha9f2e26_4",
+    "libiconv-1.18-h0cb94f2_3",
+    "openssl-3.6.4-h781a0a9_0",
+    "perl-5.32.1-7_hd590300_perl5",
+    "libgcc-ng-16.2.0-h69a702a_4",
+    "krb5-1.22.2-hbc21106_2",
+    "libstdcxx-16.2.0-h934c35e_4",
+    "libnghttp2-1.68.1-h74cf4be_1",
+    "libpsl-0.23.1-hd9e3e90_1",
+    "libssh2-1.11.1-h6154650_1",
+    "zstd-1.5.7-hb78ec9c_7",
+    "_openmp_mutex-4.5-20_gnu",
+    "libgomp-16.2.0-he0feb66_4",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-hda65f42_10",
+    "libxcrypt-4.4.38-h280c20c_0",
+    "keyutils-1.6.3-h7cc23a3_1",
+    "libedit-3.1.20250104-pl5321h373387f_1",
+    "c-ares-1.34.8-hebe6cf0_2",
+    "libev-4.33-h280c20c_3",
+    "icu-78.3-py310h44b86e0_2",
+    "ncurses-6.6-hdb14827_1",
+]
+
+[tools."conda:git"."platforms.macos-arm64"]
+checksum = "sha256:4bb0bfe6b0fcb2830689e2b6b99090b458ad791b6adca570e5d3a322eb912cbc"
+url = "https://conda.anaconda.org/conda-forge/osx-arm64/git-2.55.0-pl5321h545aa0d_1.conda"
+conda_deps = [
+    "libintl-0.25.1-h493aca8_0",
+    "libexpat-2.8.1-hf6b4638_1",
+    "libzlib-1.3.2-h8088a28_3",
+    "pcre2-10.47-he63d830_1",
+    "libcurl-8.21.0-h6651222_5",
+    "libiconv-1.18-he4c29f2_3",
+    "openssl-3.6.4-h55eecbc_0",
+    "perl-5.32.1-7_h4614cfb_perl5",
+    "krb5-1.22.2-h34f8a20_2",
+    "libnghttp2-1.68.1-h435687b_1",
+    "libpsl-0.23.1-hdb0c161_1",
+    "libssh2-1.11.1-hbf2880b_1",
+    "zstd-1.5.7-hf451053_7",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-h4e30115_10",
+    "libedit-3.1.20250104-pl5321h26f1114_1",
+    "libcxx-23.1.0-h55c6f16_0",
+    "c-ares-1.34.8-h74c22ad_2",
+    "libev-4.33-h1a92334_3",
+    "icu-78.3-py310h579977c_2",
+    "ncurses-6.6-he64c551_1",
+]
+
+[tools."conda:git"."platforms.macos-x64"]
+checksum = "sha256:d98399f38bcd3a85e5a3754a27d3941595e5ea669eba8e08c8d45fef031e063f"
+url = "https://conda.anaconda.org/conda-forge/osx-64/git-2.55.0-pl5321h083a29a_1.conda"
+conda_deps = [
+    "libexpat-2.8.1-hcc62823_1",
+    "libintl-0.25.1-h3184127_1",
+    "libzlib-1.3.2-hbb4bfdb_3",
+    "pcre2-10.47-h31793e3_1",
+    "libcurl-8.21.0-h5318221_5",
+    "libiconv-1.18-h4ae439b_3",
+    "openssl-3.6.4-h332eb6d_0",
+    "perl-5.32.1-7_h10d778d_perl5",
+    "krb5-1.22.2-h69064fd_2",
+    "libnghttp2-1.68.1-h1e30255_1",
+    "libpsl-0.23.1-h7ff43d8_1",
+    "libssh2-1.11.1-hd53bb72_1",
+    "zstd-1.5.7-hbc1a06c_7",
+    "ca-certificates-2026.7.22-hbd8a1cb_0",
+    "bzip2-1.0.8-h374f1ed_10",
+    "libedit-3.1.20250104-pl5321hba2e2ab_1",
+    "libcxx-23.1.0-h19cb2f5_0",
+    "c-ares-1.34.8-had63097_2",
+    "libev-4.33-ha3d0635_3",
+    "icu-78.3-py313hbf1d544_2",
+    "ncurses-6.6-hcc0dc9a_1",
+]
+
+[tools."conda:git"."platforms.windows-x64"]
+checksum = "sha256:2546ad3f04d1a3b120656d3fa496f8fa9a1d586adf4ab1c6d47bd1b31eda8158"
+url = "https://conda.anaconda.org/conda-forge/win-64/git-2.55.0-h57928b3_1.conda"
+conda_deps = []
+
 [[tools.cosign]]
 version = "3.1.3"
 backend = "aqua:sigstore/cosign"
@@ -1529,6 +2318,53 @@ provenance = "github-attestations"
 checksum = "sha256:c6db4dbbeff36f07ab8e9ca99816d81d44404be1fc24891ae0f87928f58e7fcc"
 url = "https://github.com/jdx/fnox/releases/download/v1.34.0/fnox-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/jdx/fnox/releases/assets/525712298"
+provenance = "github-attestations"
+
+[[tools.github-cli]]
+version = "2.98.0"
+backend = "aqua:cli/cli"
+specifiers = ["2.98.0"]
+
+[tools.github-cli."platforms.linux-arm64"]
+checksum = "sha256:cf689084f3a3618f7eae4a2420d335d74626d65f5e594b9828d125d69f800d86"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857902"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.linux-arm64-musl"]
+checksum = "sha256:cf689084f3a3618f7eae4a2420d335d74626d65f5e594b9828d125d69f800d86"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857902"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.linux-x64"]
+checksum = "sha256:3b8ac6b30336802fc1a858d7c084e11cdf24ac1a761ca90b68022d7d729208de"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857901"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.linux-x64-musl"]
+checksum = "sha256:3b8ac6b30336802fc1a858d7c084e11cdf24ac1a761ca90b68022d7d729208de"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857901"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.macos-arm64"]
+checksum = "sha256:8cfb027cc5310675f2b830eac8f9865c1155a45ffcf9757f699fdd5a22046ca4"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857972"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.macos-x64"]
+checksum = "sha256:734c7bbd0bc56a3974500ee9aea74d60f0e5b89be09e92b9d9148939a3a1e0e6"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857971"
+provenance = "github-attestations"
+
+[tools.github-cli."platforms.windows-x64"]
+checksum = "sha256:c28c7b3b584967a05b74d9eaf7481bff24ddc34930bf2d6e442c148236561eb1"
+url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/522857996"
 provenance = "github-attestations"
 
 [[tools."github:DopplerHQ/cli"]]
@@ -1727,15 +2563,45 @@ url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-darwin-x64.tar.gz"
 checksum = "sha256:d3bd72755141ed32bbcd841228ee81897c8a98d50dfa7dae2179399a0a7c90f8"
 url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-win-x64.zip"
 
-[[tools."npm:@openai/codex"]]
-version = "0.150.0"
-backend = "npm:@openai/codex"
-specifiers = ["0.150.0"]
-
 [[tools."pipx:cmakelang"]]
 version = "0.6.13"
 backend = "pipx:cmakelang"
 specifiers = ["0.6.13"]
+
+[[tools.pkl]]
+version = "0.32.1"
+backend = "aqua:apple/pkl"
+specifiers = ["0.32.1"]
+
+[tools.pkl."platforms.linux-arm64"]
+checksum = "sha256:a76d2dd47da435a8f911b0347373f47c7e59ea54fb75ff846d20b8df10dba058"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-linux-aarch64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426568"
+
+[tools.pkl."platforms.linux-arm64-musl"]
+checksum = "sha256:a76d2dd47da435a8f911b0347373f47c7e59ea54fb75ff846d20b8df10dba058"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-linux-aarch64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426568"
+
+[tools.pkl."platforms.linux-x64"]
+checksum = "sha256:3180b62da95c0cad1d904e9bb6c5f4a8f9032413c21e53194bb91ff1ee5f3211"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-linux-amd64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426567"
+
+[tools.pkl."platforms.linux-x64-musl"]
+checksum = "sha256:3180b62da95c0cad1d904e9bb6c5f4a8f9032413c21e53194bb91ff1ee5f3211"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-linux-amd64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426567"
+
+[tools.pkl."platforms.macos-arm64"]
+checksum = "sha256:563eb51c9a20b16a3625464ed745c675ed9750381f2126722696a0d7cac1d9d3"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-macos-aarch64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426570"
+
+[tools.pkl."platforms.macos-x64"]
+checksum = "sha256:5b74b903234047960144f66f2cebdd12d267d9b98e8155ed91d2ae5ed27e2d1f"
+url = "https://github.com/apple/pkl/releases/download/0.32.1/pkl-macos-amd64"
+url_api = "https://api.github.com/repos/apple/pkl/releases/assets/487426599"
 
 [[tools.python]]
 version = "3.14.7"
