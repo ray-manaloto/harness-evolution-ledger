@@ -39,11 +39,11 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "merge", "--ff-only"],
+    pattern = ["git", "merge", "--ff-only", ["origin/main", "refs/remotes/origin/main"]],
     decision = "allow",
     justification = "A fast-forward-only local synchronization fails on divergence and cannot create a merge commit.",
     match = ["git merge --ff-only origin/main", "git merge --ff-only refs/remotes/origin/main"],
-    not_match = ["git merge origin/main", "git merge --no-ff origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
+    not_match = ["git merge --ff-only", "git merge origin/main", "git merge --no-ff origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
 )
 
 prefix_rule(

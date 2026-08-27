@@ -21,6 +21,7 @@ CONTROLS = (
     (("git", "push", "origin", "topic"), "forbidden"),
     (("git", "push", "origin", "HEAD:main"), "forbidden"),
     (("git", "status", "--short"), "allow"),
+    (("git", "merge", "--ff-only"), None),
     (("git", "merge", "--ff-only", "origin/main"), "allow"),
     (("git", "merge", "origin/main"), "prompt"),
     (("git", "merge", "--no-ff", "origin/main"), "prompt"),
@@ -37,7 +38,7 @@ CONTROLS = (
 )
 
 
-def decision(command: tuple[str, ...]) -> str:
+def decision(command: tuple[str, ...]) -> str | None:
     result = subprocess.run(
         ["codex", "execpolicy", "check", "--rules", str(RULES), "--", *command],
         cwd=ROOT,
@@ -49,7 +50,8 @@ def decision(command: tuple[str, ...]) -> str:
     if result.returncode:
         raise RuntimeError(f"execpolicy failed for {command}: {result.stderr.strip()}")
     payload = json.loads(result.stdout)
-    return str(payload["decision"])
+    value = payload.get("decision")
+    return str(value) if value is not None else None
 
 
 def main() -> int:
@@ -57,7 +59,8 @@ def main() -> int:
         observed = decision(command)
         if observed != expected:
             raise AssertionError(f"{command}: expected {expected}, observed {observed}")
-        print(f"{expected:9} {' '.join(command)}")
+        label = expected or "unmatched"
+        print(f"{label:9} {' '.join(command)}")
     print(f"verified {len(CONTROLS)} command-policy controls")
     return 0
 
