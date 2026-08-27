@@ -8,6 +8,7 @@
 /.codex/local/
 /.firecrawl/
 /.phase0-controls/
+/docs/receipts/phase-0/merged.json
 *.log
 *.sarif
 **/.last30days-library.db

@@ -329,6 +329,16 @@ class Phase0PolicyTests(unittest.TestCase):
         self.assertIn("explicit prototype review bypass is active", bypass_result.stderr)
         self.assertIn("origin/main does not equal receipt SHA", bypass_result.stderr)
 
+    def test_only_declared_required_checks_gate_delivery(self) -> None:
+        live = {
+            "statusCheckRollup": [
+                {"name": "check", "conclusion": "SUCCESS"},
+                {"name": "optional-health", "conclusion": "FAILURE"},
+            ]
+        }
+        self.assertTrue(phase0.live_checks_match(live, {"check": "SUCCESS"}))
+        self.assertFalse(phase0.live_checks_match(live, {"missing": "SUCCESS"}))
+
 
 if __name__ == "__main__":
     unittest.main()

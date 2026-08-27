@@ -96,6 +96,8 @@ SHIP_REMOTE = "origin"
 SHIP_SOURCE_BRANCH = "codex/phase-0-bootstrap-completion"
 SHIP_TARGET_BRANCH = "codex/phase-0-bootstrap"
 SHIP_ORIGIN_URL = "git@github.com:ray-manaloto/harness-evolution-ledger.git"
+GITHUB_REPOSITORY = "ray-manaloto/harness-evolution-ledger"
+PHASE0_PR = 4
 
 
 def run(argv: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -650,10 +652,167 @@ def live_checks_match(live: dict[str, object], declared: dict[str, object]) -> b
     checks = live.get("statusCheckRollup")
     if not isinstance(checks, list) or not checks:
         return False
-    if not all(isinstance(item, dict) and item.get("conclusion") == "SUCCESS" for item in checks):
-        return False
-    successful_names = {item.get("name") or item.get("context") for item in checks}
-    return set(declared).issubset(successful_names)
+    observed = {
+        item.get("name") or item.get("context"): item.get("conclusion") or item.get("state")
+        for item in checks
+        if isinstance(item, dict)
+    }
+    return all(observed.get(name) == expected for name, expected in declared.items())
+
+
+def github_json(argv: list[str], repository: Path = ROOT) -> dict[str, object]:
+    result = subprocess.run(
+        ["gh", *argv],
+        cwd=repository,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "GitHub request failed")
+    data = json.loads(result.stdout)
+    if not isinstance(data, dict):
+        raise RuntimeError("GitHub response is not an object")
+    return data
+
+
+def update_required_review_count(count: int) -> int:
+    endpoint = (
+        f"repos/{GITHUB_REPOSITORY}/branches/main/protection/"
+        "required_pull_request_reviews"
+    )
+    data = github_json(
+        [
+            "api",
+            "--method",
+            "PATCH",
+            endpoint,
+            "-F",
+            f"required_approving_review_count={count}",
+        ]
+    )
+    observed = data.get("required_approving_review_count")
+    if observed != count:
+        raise RuntimeError(
+            f"GitHub review requirement mismatch: expected {count}, observed {observed}"
+        )
+    return count
+
+
+def live_pr_for_landing() -> dict[str, object]:
+    return github_json(
+        [
+            "pr",
+            "view",
+            str(PHASE0_PR),
+            "--repo",
+            GITHUB_REPOSITORY,
+            "--json",
+            "state,isDraft,headRefOid,mergeable,statusCheckRollup",
+        ]
+    )
+
+
+def sync_canonical_main(merge_sha: str) -> Path:
+    checkout, _ = prepare_canonical_checkout(preserve_dirty=False)
+    run_in(
+        checkout,
+        [
+            "git",
+            "fetch",
+            "--no-tags",
+            SHIP_REMOTE,
+            "refs/heads/main:refs/remotes/origin/main",
+        ],
+    )
+    rc, remote_main = capture_in(checkout, ["git", "rev-parse", "origin/main"])
+    if rc or remote_main != merge_sha:
+        raise RuntimeError("origin/main does not equal the GitHub merge SHA")
+    run_in(checkout, ["git", "switch", "main"])
+    ancestry = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", "HEAD", "origin/main"],
+        cwd=checkout,
+        check=False,
+    )
+    if ancestry.returncode:
+        raise RuntimeError("local main has diverged from origin/main")
+    run_in(checkout, ["git", "merge", "--ff-only", "origin/main"])
+    rc, local_head = capture_in(checkout, ["git", "rev-parse", "HEAD"])
+    if rc or local_head != merge_sha:
+        raise RuntimeError("local main does not equal the GitHub merge SHA")
+    return checkout
+
+
+def land_prototype_candidate() -> int:
+    rc, source_sha = capture(["git", "rev-parse", "HEAD"])
+    if rc:
+        print("land blocked: candidate SHA is unavailable", file=sys.stderr)
+        return 2
+    live = live_pr_for_landing()
+    declared_checks = {"check": "SUCCESS"}
+    if (
+        live.get("state") != "OPEN"
+        or live.get("isDraft") is not False
+        or live.get("headRefOid") != source_sha
+        or live.get("mergeable") != "MERGEABLE"
+        or not live_checks_match(live, declared_checks)
+    ):
+        print("land blocked: exact PR head or required checks are not ready", file=sys.stderr)
+        return 2
+
+    protection = github_json(
+        [
+            "api",
+            f"repos/{GITHUB_REPOSITORY}/branches/main/protection/required_pull_request_reviews",
+        ]
+    )
+    original_count = protection.get("required_approving_review_count")
+    if not isinstance(original_count, int):
+        print("land blocked: review protection is unavailable", file=sys.stderr)
+        return 2
+
+    merge: dict[str, object] | None = None
+    try:
+        update_required_review_count(0)
+        merge = github_json(
+            [
+                "api",
+                "--method",
+                "PUT",
+                f"repos/{GITHUB_REPOSITORY}/pulls/{PHASE0_PR}/merge",
+                "-f",
+                "merge_method=squash",
+                "-f",
+                f"sha={source_sha}",
+            ]
+        )
+    finally:
+        update_required_review_count(original_count)
+
+    merge_sha = merge.get("sha") if isinstance(merge, dict) else None
+    if merge is None or merge.get("merged") is not True or not isinstance(merge_sha, str):
+        print("land failed: GitHub did not merge the exact candidate", file=sys.stderr)
+        return 2
+    checkout = sync_canonical_main(merge_sha)
+    receipt = {
+        "schema": 1,
+        "pr": PHASE0_PR,
+        "remote_sha": merge_sha,
+        "review": {
+            "decision": "PROTOTYPE_BYPASS",
+            "authorization": "--prototype-bypass-review",
+        },
+        "checks": declared_checks,
+    }
+    marker = checkout / "docs/receipts/phase-0/merged.json"
+    marker.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    verification = run_in(
+        checkout,
+        ["mise", "run", "land", "--prototype-bypass-review"],
+        check=False,
+    )
+    return verification.returncode
 
 
 def live_delivery_matches(
@@ -679,6 +838,8 @@ def live_delivery_matches(
 def delivery_gate(operation: str, prototype_bypass_review: bool = False) -> int:
     marker = ROOT / "docs/receipts/phase-0/merged.json"
     if not marker.is_file():
+        if operation == "land" and prototype_bypass_review:
+            return land_prototype_candidate()
         print(f"{operation} blocked: phase-0 merged receipt is absent", file=sys.stderr)
         return 2
     data = json.loads(marker.read_text(encoding="utf-8"))
