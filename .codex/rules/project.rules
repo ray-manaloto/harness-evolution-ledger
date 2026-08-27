@@ -39,10 +39,26 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["merge", "rebase", "cherry-pick"]],
+    pattern = ["git", "merge", "--ff-only"],
+    decision = "allow",
+    justification = "A fast-forward-only local synchronization fails on divergence and cannot create a merge commit.",
+    match = ["git merge --ff-only origin/main", "git merge --ff-only refs/remotes/origin/main"],
+    not_match = ["git merge origin/main", "git merge --no-ff origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
+)
+
+prefix_rule(
+    pattern = ["git", "merge", ["origin/main", "--no-ff", "--ff", "--squash"]],
     decision = "prompt",
-    justification = "History-changing integration remains gated by the repository land task.",
-    match = ["git merge origin/main", "git rebase origin/main", "git cherry-pick deadbeef"],
+    justification = "Merge modes that can create commits remain gated by the repository land task.",
+    match = ["git merge origin/main", "git merge --no-ff origin/main", "git merge --ff origin/main", "git merge --squash origin/main"],
+    not_match = ["git merge --ff-only origin/main", "git diff origin/main...HEAD"],
+)
+
+prefix_rule(
+    pattern = ["git", ["rebase", "cherry-pick"]],
+    decision = "prompt",
+    justification = "History-rewriting integration remains gated by the repository land task.",
+    match = ["git rebase origin/main", "git cherry-pick deadbeef"],
     not_match = ["git diff origin/main...HEAD", "git log --oneline"],
 )
 
